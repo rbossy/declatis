@@ -4,7 +4,7 @@ var app = new App({
 		words.sort(Word.SCORE_COMPARATOR).reverse();
 		var tab = $('#generated-words');
 		tab.empty();
-		var cols = 3;
+		var cols = 4;
 		for (var i = 0; i < words.length; i += cols) {
 			var row = $('<tr></tr>');
 			for (var c = 0; c < cols; ++c) {
@@ -17,20 +17,26 @@ var app = new App({
 		var result = $('<td></td>');
 		if (i < words.length) {
 			var w = words[i];
-			var cell = $('<a class="generated-word" href="#">'+w.cleanString+'</a>');
-			result.append(cell);
-			cell.popover({
-				title: w.cleanString,
+			result.text(w.cleanString);
+			result.popover({
+				title: '<h4>' + w.cleanString + '</h4>',
 				html: true,
-				content: '<table><tbody><tr><th><a href="http://www.google.com/search?q='+w.cleanString+'" target="_new">Search</a></th></tr><tr><th>Score</th><td>'+w.score.toFixed(4)+'</td></tr></tbody></table>',
-				trigger: 'focus',
+				content: (
+					'<table><tbody>'+
+					'<tr><th class="score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
+					'<tr><th class="score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
+					'<tr><th class="score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>'+
+					'<tr><th class="score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>'+
+					'</tbody></table>'
+					),
+				trigger: 'hover',
 				placement: 'top',
 			});
-			cell.on('show.bs.popover', function() { $('.generated-word').popover('hide'); })
 		}
 		return result;
 	}
 });
+app.wordCount = 40;
 
 class Action {
 	static setK(k) {
@@ -39,6 +45,9 @@ class Action {
 	}
 
 	static setLength(min, max) {
+		if (min == Action.min && max == Action.max) {
+			return;
+		}
 		Action.min = min;
 		Action.max = max;
 		Action.update();
