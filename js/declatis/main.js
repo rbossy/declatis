@@ -17,21 +17,25 @@ var app = new App({
 		var result = $('<td></td>');
 		if (i < words.length) {
 			var w = words[i];
-			result.text(w.cleanString);
-			result.popover({
-				title: '<h4>' + w.cleanString + '</h4>',
-				html: true,
-				content: (
-					'<table><tbody>'+
-					'<tr><th class="score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
-					'<tr><th class="score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
-					'<tr><th class="score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>'+
-					'<tr><th class="score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>'+
-					'</tbody></table>'
-					),
-				trigger: 'hover',
-				placement: 'top',
-			});
+			var s = w.cleanString;
+			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group"></div>').append(
+				$('<button type="button" class="btn btn-light container-fluid"></button>').text(s),
+				$('<button type="button" class="btn btn-light">i</button>').popover({
+					title: '<h4>' + w.cleanString + '</h4>',
+					html: true,
+					content: (
+						'<table><tbody>'+
+						'<tr><th class="word-score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
+						'<tr><th class="word-score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
+						'<tr><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>'+
+						'<tr><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>'+
+						'</tbody></table>'
+						),
+					trigger: 'focus',
+					placement: 'top',
+				})
+			);
+			result.append(cell);
 		}
 		return result;
 	}
