@@ -1,0 +1,20 @@
+#character-count {
+	width: 500px;
+}
+
+.slider-tick-label {
+	font-size: 60%;
+}
+
+#header {
+	margin-bottom: 1cm;
+}
+
+.form-row {
+	height: 2cm;
+}
+
+.form-label {
+	font-size: 120%;
+	font-family: sans-serif;
+}

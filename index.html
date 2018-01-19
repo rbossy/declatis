@@ -1,0 +1,91 @@
+<html>
+<head>
+	<title>declatis -- Name generator</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-slider.min.css" rel="stylesheet">
+	<link href="css/declatis.css" rel="stylesheet">
+	<script src="js/declatis/word.js"></script>
+	<script src="js/declatis/matrix.js"></script>
+	<script src="js/declatis/pattern.js"></script>
+	<script src="js/declatis/dictionary.js"></script>
+	<script src="js/declatis/app.js"></script>
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/declatis/main.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/bootstrap-slider.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div id="header" class="row">
+			<div class="col">
+				<h2 class="float-left">Déclatis <small class="text-muted">Word generator</small></h2>
+			</div>
+			<div class="col">
+				<div class="btn-group float-right" role="group">
+					<button type="button" class="btn" data-toggle="modal" data-target="#about" data-toggle="tooltip" data-placement="bottom" title="About Yadrol - Credits">
+						<span class="icon-info-with-circle"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div id="content" class="row">
+			<div class="col-4">
+				<div class="row form-row">
+					<div class="col form-label">
+						Likeness
+					</div>
+					<div class="col">
+						<div id="k-button-group" class="btn-group" data-toggle="buttons">
+							<label class="btn btn-sm btn-primary active">
+								<input type="radio" name="familiarity" onchange="Action.setK(1)">
+								Low
+							</label>
+							<label class="btn btn-sm btn-primary">
+								<input type="radio" name="familiarity" onchange="Action.setK(2)" checked>
+								Moderate
+							</label>
+							<label class="btn btn-sm btn-primary">
+								<input type="radio" name="familiarity" onchange="Action.setK(3)">
+								High
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="row form-row">
+					<div class="col form-label">
+						Length
+					</div>
+					<div class="col">
+						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-tooltip="always"/>
+					</div>
+				</div>
+				<div class="row form-row">
+					<div class="col form-label">
+						Dictionary
+					</div>
+					<div class="col">
+						<div class="dropdown">
+							<button id="current-dictionary" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							</button>
+							<div id="dictionaries" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row form-row">
+					<div class="col">
+					</div>
+					<div class="col">
+						<button type="button" class="btn btn-primary" onclick="Action.update()">Generate</button>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<table class="table">
+					<tbody id="generated-words">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+	</html>
