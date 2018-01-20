@@ -45,8 +45,8 @@ class Action {
 		if (i < words.length) {
 			var w = words[i];
 			var s = w.cleanString;
-			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group"></div>').append(
-				$('<button type="button" class="btn btn-light container-fluid word-string" data-toggle="button"></button>').text(s),
+			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
+				$('<label class="btn btn-light container-fluid"><input type="checkbox" class="word-string" onchange="Action.updateSelected()" autocomplete="off">'+s+'</label>'),
 				$('<button type="button" class="btn btn-light"></button>').popover({
 					title: '<h4>' + w.cleanString + '</h4>',
 					html: true,
@@ -67,6 +67,9 @@ class Action {
 		return result;
 	}
 
+	static updateSelected() {
+		$('#selected-words').text($('.word-string:checked').length);
+	}
 }
 Action.k = 2;
 Action.min = 6;
