@@ -49,8 +49,11 @@ class Action {
 	}
 
 	static setLength(min, max) {
-		if (min == Action.min && max == Action.max) {
+		if (min === Action.min && max === Action.max) {
 			return;
+		}
+		if (min === max) {
+			return; //
 		}
 		Action.min = min;
 		Action.max = max;
