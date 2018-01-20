@@ -36,16 +36,16 @@
 						Familiarity
 					</div>
 					<div class="col">
-						<div id="k-button-group" class="btn-group" data-toggle="buttons">
-							<label class="btn btn-sm btn-primary active">
+						<div id="k-button-group" class="btn-group container-fluid" data-toggle="buttons">
+							<label class="btn btn-sm btn-primary active container-fluid">
 								<input type="radio" name="familiarity" onchange="Action.setK(1)">
 								Low
 							</label>
-							<label class="btn btn-sm btn-primary">
+							<label class="btn btn-sm btn-primary container-fluid">
 								<input type="radio" name="familiarity" onchange="Action.setK(2)" checked>
 								Moderate
 							</label>
-							<label class="btn btn-sm btn-primary">
+							<label class="btn btn-sm btn-primary container-fluid">
 								<input type="radio" name="familiarity" onchange="Action.setK(3)">
 								High
 							</label>
@@ -56,8 +56,8 @@
 					<div class="col form-label">
 						Length
 					</div>
-					<div class="col">
-						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-tooltip="always"/>
+					<div class="col text-center">
+						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-handle="square"/>
 					</div>
 				</div>
 				<div class="row form-row">
@@ -65,8 +65,8 @@
 						Dictionary
 					</div>
 					<div class="col">
-						<div class="dropdown">
-							<button id="current-dictionary" class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<div class="dropdown container-fluid">
+							<button id="current-dictionary" class="btn btn-sm btn-primary dropdown-toggle container-fluid" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							</button>
 							<div id="dictionaries" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							</div>
@@ -74,10 +74,12 @@
 					</div>
 				</div>
 				<div class="row form-row">
-					<div class="col">
+					<div class="col-6">
 					</div>
-					<div class="col">
-						<button type="button" class="btn btn-lg btn-primary icon-cw" onclick="Action.update()"></button>
+					<div class="col-6 text-center">
+						<button id="btn-generate" type="button" class="btn btn-lg btn-success" onclick="Action.update()">
+							<span class="icon-controller-play"></span>
+						</button>
 					</div>
 				</div>
 			</div>

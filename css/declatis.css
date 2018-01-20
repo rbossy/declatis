@@ -19,6 +19,15 @@
 	font-family: sans-serif;
 }
 
+#btn-generate {
+	width: 100px;
+}
+
 .word-score {
 	padding-right: 2mm;
+}
+
+.word-string {
+    text-transform: capitalize;
+    font-weight: bold;
 }
