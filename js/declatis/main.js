@@ -19,8 +19,8 @@ var app = new App({
 			var w = words[i];
 			var s = w.cleanString;
 			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group"></div>').append(
-				$('<button type="button" class="btn btn-light container-fluid"></button>').text(s),
-				$('<button type="button" class="btn btn-light">i</button>').popover({
+				$('<button type="button" class="btn btn-light container-fluid" data-toggle="button"></button>').text(s),
+				$('<button type="button" class="btn btn-light">?</button>').popover({
 					title: '<h4>' + w.cleanString + '</h4>',
 					html: true,
 					content: (
@@ -33,7 +33,7 @@ var app = new App({
 						),
 					trigger: 'focus',
 					placement: 'top',
-				})
+				}),
 			);
 			result.append(cell);
 		}
