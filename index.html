@@ -78,25 +78,27 @@
 					</div>
 					<div class="col-6 text-center">
 						<button id="btn-generate" type="button" class="btn btn-lg btn-success" onclick="Action.update()">
-							<span class="icon-controller-play"></span>
+							<span class="icon-cycle"></span>
 						</button>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<div class="btn-group container-fluid" role="group" aria-label="Selection">
-							<button id="btn-export" type="button" class="btn btn-dark container-fluid" onclick="Action.export()" disabled>To clipboard <span id="selected-words" class="badge badge-pill badge-info">0</span></button>
-							<button type="button" class="btn btn-dark icon-check text-success" onclick="Action.selectAll()"></button>
-							<button type="button" class="btn btn-dark icon-block text-danger" onclick="Action.selectNone()"></button>
-						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col">
-				<table class="table">
-					<tbody id="generated-words">
-					</tbody>
-				</table>
+				<div id="row-selection" class="row">
+					<div class="col">
+						<div class="btn-group container-fluid" role="group" aria-label="Selection">
+							<button id="btn-export" type="button" class="btn btn-dark icon-download" onclick="Action.export()" disabled data-toggle="tooltip" data-placement="top" title="Copy selected words to clipboard"> <span id="selected-words" class="badge badge-pill badge-info">0</span></button>
+							<button type="button" class="btn btn-dark icon-check text-success" onclick="Action.selectAll()" data-toggle="tooltip" data-placement="top" title="Select all words"></button>
+							<button type="button" class="btn btn-dark icon-block text-danger" onclick="Action.selectNone()" data-toggle="tooltip" data-placement="top" title="Unselect all words"></button>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<table class="table">
+						<tbody id="generated-words">
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</body>

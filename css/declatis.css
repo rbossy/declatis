@@ -40,3 +40,7 @@
 #selected-words {
 	display: none;
 }
+
+#row-selection {
+	margin-bottom: 5mm;
+}
