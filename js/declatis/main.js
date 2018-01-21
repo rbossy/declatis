@@ -13,6 +13,8 @@ class Action {
 		}
 		Action.min = min;
 		Action.max = max;
+		console.log(min);
+		console.log(max);
 		Action.update();
 	}
 
@@ -126,8 +128,8 @@ var app = new App({
 app.wordCount = 40;
 
 $(document).ready(function() {
-	var slider = $("#character-count").slider().data('slider');
-	slider.on('slide', function() { Action.setLength(slider.getValue()[0], slider.getValue()[1]); });
+	var slider = $("#character-count").slider();
+	slider.on('change', function() { var v = slider.data('slider').getValue(); Action.setLength(v[0], v[1]); });
 
 	var dicts = $('#dictionaries');
 	for (var d of Dictionary.PRESETS) {
