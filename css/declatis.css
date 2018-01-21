@@ -30,4 +30,9 @@
 .word-string {
     text-transform: capitalize;
     font-weight: bold;
+	height: 32px;
+}
+
+.word-status {
+	height: 32px;
 }
