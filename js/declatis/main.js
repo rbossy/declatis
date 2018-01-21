@@ -72,8 +72,12 @@ class Action {
 		return result;
 	}
 
+	static countSelectedWords() {
+		return $('.word-string input:checked').length;
+	}
+
 	static updateSelected() {
-		var n = $('.word-string input:checked').length;
+		var n = Action.countSelectedWords();
 		if (n == 0) {
 			$('#selected-words').css('display', 'none');
 			$('#btn-export').attr('disabled', true);
@@ -108,7 +112,7 @@ class Action {
 		$temp.val(Action.selectedWordsArray().join('\n')).select();
 		document.execCommand("copy");
 		$temp.remove();
-		$('#alerts').prepend('<div class="row alert alert-success alert-dismissible" role="alert">Sent selected words to clipboard. Paste them in your favourite application.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+		$('#alerts').prepend('<div class="row alert alert-success alert-dismissible" role="alert">Sent '+Action.countSelectedWords()+' words to clipboard. Paste them in your favourite application.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 		window.setTimeout(function() {
 			$(".alert").fadeTo(500, 0).slideUp(500, function(){
 				$(this).remove(); 
