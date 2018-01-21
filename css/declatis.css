@@ -40,3 +40,7 @@
 #selection-tools {
 	margin-bottom: 10mm;
 }
+
+#btn-export {
+	width: 100px;
+}
