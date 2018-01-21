@@ -83,11 +83,13 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="btn-group" role="group" aria-label="Selection">
-						<button type="button" class="btn btn-light" onclick="Action.export()">Clip <span id="selected-words" class="badge badge-pill badge-primary">0</span></button>
-						<button type="button" class="btn btn-light icon-check text-success" onclick="Action.selectAll()"></button>
-						<button type="button" class="btn btn-light icon-block text-danger" onclick="Action.selectNone()"></button>
-				</div>
+					<div class="col">
+						<div class="btn-group container-fluid" role="group" aria-label="Selection">
+							<button id="btn-export" type="button" class="btn btn-dark container-fluid" onclick="Action.export()" disabled>To clipboard <span id="selected-words" class="badge badge-pill badge-info">0</span></button>
+							<button type="button" class="btn btn-dark icon-check text-success" onclick="Action.selectAll()"></button>
+							<button type="button" class="btn btn-dark icon-block text-danger" onclick="Action.selectNone()"></button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="col">

@@ -36,3 +36,7 @@
 .word-status {
 	height: 32px;
 }
+
+#selected-words {
+	display: none;
+}

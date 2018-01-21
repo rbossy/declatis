@@ -71,7 +71,15 @@ class Action {
 	}
 
 	static updateSelected() {
-		$('#selected-words').text($('.word-string input:checked').length);
+		var n = $('.word-string input:checked').length;
+		if (n == 0) {
+			$('#selected-words').css('display', 'none');
+			$('#btn-export').attr('disabled', true);
+		}
+		else {
+			$('#selected-words').css('display', 'inline-block').text(n);
+			$('#btn-export').attr('disabled', false);
+		}
 	}
 
 	static selectAll() {
@@ -84,6 +92,20 @@ class Action {
 		$('.word-string input').prop('checked', false);
 		$('.word-string').removeClass('active');
 		Action.updateSelected();
+	}
+
+	static selectedWordsArray() {
+		var result = [];
+		$('.word-string input:checked').each(function(i, e) { result.push(e.parentNode.textContent); });
+		return result;
+	}
+
+	static export() {
+		var $temp = $("<textarea></textarea>");
+		$("body").append($temp);
+		$temp.val(Action.selectedWordsArray().join('\n')).select();
+		document.execCommand("copy");
+		$temp.remove();
 	}
 }
 Action.k = 2;
