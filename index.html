@@ -57,7 +57,7 @@
 						Length
 					</div>
 					<div class="col text-center">
-						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-handle="square"/>
+						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-handle="square" data-toggle="tooltip" data-placement="top" title="Word length"/>
 					</div>
 				</div>
 				<div class="row form-row">
@@ -65,7 +65,7 @@
 						Dictionary
 					</div>
 					<div class="col">
-						<div class="dropdown container-fluid">
+						<div class="dropdown container-fluid" data-toggle="tooltip" data-placement="top" title="Training dictionary">
 							<button id="current-dictionary" class="btn btn-sm btn-primary dropdown-toggle container-fluid" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							</button>
 							<div id="dictionaries" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -78,19 +78,21 @@
 					</div>
 					<div class="col-6 text-center">
 						<button id="btn-generate" type="button" class="btn btn-lg btn-success" onclick="Action.update()">
-							<span class="icon-cycle"></span>
+							<span class="icon-cycle" data-toggle="tooltip" data-placement="top" title="Regenerate"></span>
 						</button>
 					</div>
 				</div>
 			</div>
 			<div class="col">
-				<div id="row-selection" class="row">
-					<div class="col">
+				<div class="row">
+					<div id="selection-tools" class="col-4">
 						<div class="btn-group container-fluid" role="group" aria-label="Selection">
 							<button id="btn-export" type="button" class="btn btn-dark icon-download" onclick="Action.export()" disabled data-toggle="tooltip" data-placement="top" title="Copy selected words to clipboard"> <span id="selected-words" class="badge badge-pill badge-info">0</span></button>
 							<button type="button" class="btn btn-dark icon-check text-success" onclick="Action.selectAll()" data-toggle="tooltip" data-placement="top" title="Select all words"></button>
 							<button type="button" class="btn btn-dark icon-block text-danger" onclick="Action.selectNone()" data-toggle="tooltip" data-placement="top" title="Unselect all words"></button>
 						</div>
+					</div>
+					<div id="alerts" class="col-8">
 					</div>
 				</div>
 				<div class="row">
