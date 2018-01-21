@@ -46,8 +46,9 @@ class Action {
 			var w = words[i];
 			var s = w.cleanString;
 			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
-				$('<label class="btn btn-light container-fluid"><input type="checkbox" class="word-string" onchange="Action.updateSelected()" autocomplete="off">'+s+'</label>'),
-				$('<button type="button" class="btn btn-light"></button>').popover({
+				$('<label class="btn btn-light container-fluid btn-lg word-string"><input type="checkbox" onchange="Action.updateSelected()" autocomplete="off">'+s+'</label>'),
+				$('<button type="button" class="btn btn-light btn-sm word-status"></button>')
+				.popover({
 					title: '<h4>' + w.cleanString + '</h4>',
 					html: true,
 					content: (
@@ -60,7 +61,9 @@ class Action {
 						),
 					trigger: 'focus',
 					placement: 'top',
-				}).append($('<span></span>').addClass(w.kDegradationMean + w.backtrackCount > 0 ? 'icon-warning text-warning' : 'icon-info text-success')),
+				})
+				.addClass(w.kDegradationMean + w.backtrackCount > 0 ? 'icon-warning text-warning' : 'icon-info text-success')
+				,
 			);
 			result.append(cell);
 		}
@@ -68,7 +71,19 @@ class Action {
 	}
 
 	static updateSelected() {
-		$('#selected-words').text($('.word-string:checked').length);
+		$('#selected-words').text($('.word-string input:checked').length);
+	}
+
+	static selectAll() {
+		$('.word-string input').prop('checked', true);
+		$('.word-string').addClass('active');
+		Action.updateSelected();
+	}
+
+	static selectNone() {
+		$('.word-string input').prop('checked', false);
+		$('.word-string').removeClass('active');
+		Action.updateSelected();
 	}
 }
 Action.k = 2;
