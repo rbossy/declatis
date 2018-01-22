@@ -119,6 +119,10 @@ class Action {
 			});
 		}, 4000);
 	}
+
+	static setLengthDisplay(min, max) {
+		$('#character-count-badge').text('' + min + '-' + max);
+	}
 }
 Action.k = 2;
 Action.min = 6;
@@ -134,6 +138,7 @@ app.wordCount = 40;
 $(document).ready(function() {
 	var slider = $("#character-count").slider();
 	slider.on('slideStop', function() { var v = slider.data('slider').getValue(); Action.setLength(v[0], v[1]); });
+	slider.on('change', function() { var v = slider.data('slider').getValue(); Action.setLengthDisplay(v[0], v[1]); });
 
 	var dicts = $('#dictionaries');
 	for (var d of Dictionary.PRESETS) {
