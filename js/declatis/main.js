@@ -40,6 +40,13 @@ class Action {
 			}
 			tab.append(row);
 		}
+		$('.chart').easyPieChart({
+			size: 20,
+			lineWidth: 2,
+			trackColor: '#DDDDDD',
+			scaleColor: false,
+			barColor: '#444444'
+		});
 	}
 
 	static wordAsCell(words, i) {
@@ -49,7 +56,7 @@ class Action {
 			var s = w.cleanString;
 			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
 				$('<label class="btn btn-light container-fluid btn-lg word-string"><input type="checkbox" onchange="Action.updateSelected()" autocomplete="off">'+s+'</label>'),
-				$('<button type="button" class="btn btn-light btn-sm word-status"></button>')
+				$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
 				.popover({
 					title: '<h4>' + w.cleanString + '</h4>',
 					html: true,
@@ -57,15 +64,16 @@ class Action {
 						'<table><tbody>'+
 						'<tr><th class="word-score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
 						'<tr><th class="word-score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
-						(w.kDegradationMean > 0 ? '<tr class="text-warning"><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>' : '')+
-						(w.backtrackCount > 0 ? '<tr class="text-warning"><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>' : '')+
+						(w.kDegradationMean > 0 ? '<tr><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>' : '')+
+						(w.backtrackCount > 0 ? '<tr><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>' : '')+
 						'</tbody></table>'
 						),
 					trigger: 'focus',
 					placement: 'top',
 				})
 				.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
-				.addClass(w.kDegradationMean + w.backtrackCount > 0 ? 'icon-warning text-warning' : 'icon-info text-success')
+				.append('<div class="chart" data-percent="'+w.score*150+'">.'+Math.round(w.score*100)+'</div>')
+				//.addClass(w.kDegradationMean + w.backtrackCount > 0 ? 'icon-warning' : 'icon-info')
 				,
 			);
 			result.append(cell);
@@ -132,7 +140,7 @@ Action.dictionary = 'French proper names';
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: function(words) { Action.displayWords(words.sort(Word.SCORE_COMPARATOR).reverse()); },
+	GenerationFinished: Action.displayWords //function(words) { Action.displayWords(words.sort(Word.SCORE_COMPARATOR).reverse()); },
 });
 app.wordCount = 40;
 
