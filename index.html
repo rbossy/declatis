@@ -3,6 +3,7 @@
 	<title>declatis -- Name generator</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/bootstrap-slider.min.css" rel="stylesheet">
+	<link href="css/bootstrap-tour.min.css" rel="stylesheet">
 	<link href="css/entypo-plus.css" rel="stylesheet">
 	<link href="css/declatis.css" rel="stylesheet">
 	<script src="js/declatis/word.js"></script>
@@ -11,9 +12,11 @@
 	<script src="js/declatis/dictionary.js"></script>
 	<script src="js/declatis/app.js"></script>
 	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/declatis/main.js"></script>
 	<script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/bootstrap-slider.min.js"></script>
+	<script src="js/bootstrap-tour.min.js"></script>
+	<script src="js/declatis/help.js"></script>
+	<script src="js/declatis/main.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -23,7 +26,7 @@
 			</div>
 			<div class="col">
 				<div class="btn-group float-right" role="group">
-					<button type="button" class="btn btn-light" data-toggle="modal" data-target="#about" data-toggle="tooltip" data-placement="bottom" title="About Yadrol - Credits">
+					<button type="button" class="btn btn-light" onclick="Help.startTutorial()">
 						<span class="icon-help-with-circle"></span>
 					</button>
 				</div>
@@ -31,6 +34,19 @@
 		</div>
 		<div id="content" class="row">
 			<div class="col-4">
+				<div class="row form-row">
+					<div class="col form-label">
+						Dictionary
+					</div>
+					<div class="col">
+						<div class="dropdown container-fluid" data-toggle="tooltip" data-placement="top" title="Training dictionary">
+							<button id="current-dictionary" class="btn btn-sm btn-primary dropdown-toggle container-fluid" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							</button>
+							<div id="dictionaries" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="row form-row">
 					<div class="col form-label">
 						Familiarity
@@ -57,20 +73,7 @@
 						Length
 					</div>
 					<div class="col text-center">
-						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-ticks-snap-bounds="200"/>
-					</div>
-				</div>
-				<div class="row form-row">
-					<div class="col form-label">
-						Dictionary
-					</div>
-					<div class="col">
-						<div class="dropdown container-fluid" data-toggle="tooltip" data-placement="top" title="Training dictionary">
-							<button id="current-dictionary" class="btn btn-sm btn-primary dropdown-toggle container-fluid" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							</button>
-							<div id="dictionaries" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							</div>
-						</div>
+						<input id="character-count" type="text" class="span2" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[6,10]" data-slider-ticks-snap-bounds="200" data-slider-id="character-count-slider"/>
 					</div>
 				</div>
 				<div class="row form-row">
