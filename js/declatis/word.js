@@ -6,10 +6,19 @@ class Slot {
 		this.kDegradation = kDegradation;
 		this.backtrackCount = undefined;
 	}
+
+	get score() {
+		var result = this.probability / (this.kDegradation + 1);
+		if (this.backtrackCount !== undefined) {
+			result *= (this.generator.maxBacktracks - this.backtrackCount) / this.generator.maxBacktracks;
+		}
+		return result;
+	}
 }
 
 class Word {
-	constructor() {
+	constructor(pattern) {
+		this.pattern = pattern;
 		this.slots = [];
 	}
 
@@ -30,8 +39,7 @@ class Word {
 	}
 
 	get scoredString() {
-		return
-		this.score.toFixed(4) + ' ' +
+		return this.score.toFixed(4) + ' ' +
 		this.meanProbability.toFixed(2) + ' ' +
 		this.kDegradationMean.toFixed(2) + ' ' +
 		this.backtrackCount + ' ' +
@@ -105,11 +113,11 @@ class Word {
 		var n = 0;
 		for (var slot of this.slots) {
 			if (slot.generator instanceof Markovian) {
-				sum += slot.probability / (slot.kDegradation + 1);
+				sum += slot.score;
 				n += 1;
 			}
 		}
-		return sum / n;
+		return (sum / n);
 	}
 
 	last(n) {

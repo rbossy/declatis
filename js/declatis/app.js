@@ -32,7 +32,7 @@ class App {
 	addDefaultPattern(matrix, k, min, max, prefix, suffix) {
 		var pattern = new Pattern('default');
 		pattern.addConstant(prefix);
-		pattern.addMarkovian(matrix, k, min, max);
+		pattern.addMarkovian(matrix, k, min, max, this.maxBacktracks);
 		pattern.addConstant(suffix);
 		this.addPattern(pattern);
 	}
@@ -63,7 +63,7 @@ class App {
 		var result = [];
 		while (result.length < this.wordCount) {
 			try {
-				var word = this.currentPattern.generate(this.maxBacktracks);
+				var word = this.currentPattern.generate();
 			}
 			catch (e) {
 				if (e instanceof TooManyBacktracksError) {

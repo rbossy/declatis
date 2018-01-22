@@ -53,12 +53,13 @@ class TooManyBacktracksError extends Error {
 }
 
 class Markovian extends Generator {
-	constructor(matrix, k, min, max) {
+	constructor(matrix, k, min, max, maxBacktracks = Number.MAX_VALUE) {
 		super(undefined);
 		this.matrix = matrix;
 		this.k = Math.min(k, matrix.kmax);
 		this.min = min;
 		this.max = max;
+		this.maxBacktracks = maxBacktracks;
 		this.lookahead = undefined;
 	}
 
@@ -95,7 +96,7 @@ class Markovian extends Generator {
 		}
 	}
 
-	generate(word, maxBacktracks = Number.MAX_VALUE) {
+	generate(word) {
 		this.generateSlots(word, this.min, true);
 		if (this.lookahead === undefined) {
 			var n = Math.floor(Math.random() * (this.max - this.min));
@@ -103,7 +104,7 @@ class Markovian extends Generator {
 		}
 		else {
 			var mark = word.length;
-			for (var backtrackCount = 0; backtrackCount < maxBacktracks; ++backtrackCount) {
+			for (var backtrackCount = 0; backtrackCount < this.maxBacktracks; ++backtrackCount) {
 				for (var i = this.min; i < this.max; ++i) {
 					var slot = this.generateSlot(word, this.lookahead !== Matrix.END_CHAR);
 					if (slot.char === this.lookahead) {
@@ -134,12 +135,12 @@ class Pattern {
 		this.generators[this.generators.length-1].lookahead = Pattern.END_CHAR.firstChar;
 	}
 
-	generate(maxBacktracks = Number.MAX_VALUE) {
+	generate() {
 		this._updateLookaheads();
-		var word = new Word();
+		var word = new Word(this);
 		Pattern.START_CHAR.generate(word);
 		for (var gen of this.generators) {
-			gen.generate(word, maxBacktracks);
+			gen.generate(word);
 		}
 		Pattern.END_CHAR.generate(word);
 		return word;
@@ -151,11 +152,11 @@ class Pattern {
 		}
 	}
 
-	addMarkovian(matrix, k, min, max) {
+	addMarkovian(matrix, k, min, max, maxBacktracks) {
 		if ((typeof matrix) === 'string') {
 			matrix = Dictionary.get(matrix).matrix;
 		}
-		this.generators.push(new Markovian(matrix, k, min, max));
+		this.generators.push(new Markovian(matrix, k, min, max, maxBacktracks));
 	}
 }
 Pattern.START_CHAR = new Constant(Matrix.START_CHAR);
