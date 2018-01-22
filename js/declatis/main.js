@@ -127,7 +127,7 @@ Action.dictionary = 'French proper names';
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: Action.displayWords,
+	GenerationFinished: function(words) { Action.displayWords(words.sort(Word.SCORE_COMPARATOR).reverse()); },
 });
 app.wordCount = 40;
 
