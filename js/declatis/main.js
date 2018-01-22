@@ -64,6 +64,7 @@ class Action {
 					trigger: 'focus',
 					placement: 'top',
 				})
+				.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
 				.addClass(w.kDegradationMean + w.backtrackCount > 0 ? 'icon-warning text-warning' : 'icon-info text-success')
 				,
 			);
