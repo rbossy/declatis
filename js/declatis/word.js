@@ -105,8 +105,7 @@ class Word {
 		var n = 0;
 		for (var slot of this.slots) {
 			if (slot.generator instanceof Markovian) {
-				var realK = slot.generator.k - slot.kDegradation;
-				sum += slot.probability / realK;
+				sum += slot.probability / (slot.kDegradation + 1);
 				n += 1;
 			}
 		}
