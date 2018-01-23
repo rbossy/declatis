@@ -24,8 +24,46 @@ class Action {
 		Action.update();
 	}
 
+	static setPrefix(prefix) {
+		if (prefix === undefined) {
+			prefix = $('#prefix').val();
+		}
+		prefix = prefix.trim();
+		if (prefix === '') {
+			prefix = undefined;
+		}
+		if (prefix === Action.prefix) {
+			return;
+		}
+		Action.prefix = prefix;
+		Action.update();
+	}
+
+	static setSuffix(suffix) {
+		if (suffix === undefined) {
+			suffix = $('#suffix').val();
+		}
+		suffix = suffix.trim();
+		if (suffix === '') {
+			suffix = undefined;
+		}
+		if (suffix === Action.suffix) {
+			return;
+		}
+		Action.suffix = suffix;
+		Action.update();
+	}
+
+	static _len(s) {
+		if (s === undefined) {
+			return 0;
+		}
+		return s.length;
+	}
+
 	static update() {
-		app.addDefaultPattern(Action.dictionary, Action.k, Action.min, Action.max);
+		var nFixed = Action._len(Action.prefix) + Action._len(Action.suffix);
+		app.addDefaultPattern(Action.dictionary, Action.k, Action.min - nFixed, Action.max - nFixed, Action.prefix, Action.suffix);
 		app.excludeTrainingWords.push(Dictionary.get(Action.dictionary).matrix);
 		app.generate();
 	}
@@ -137,6 +175,8 @@ Action.k = 2;
 Action.min = 6;
 Action.max = 10;
 Action.dictionary = 'French proper names';
+Action.prefix = undefined;
+Action.suffix = undefined;
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
