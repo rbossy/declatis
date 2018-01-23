@@ -68,13 +68,13 @@ class Action {
 		app.generate();
 	}
 
-	static displayWords(words, cols=4) {
+	static displayWords() {
 		var tab = $('#generated-words');
 		tab.empty();
-		for (var i = 0; i < words.length; i += cols) {
+		for (var i = 0; i < Action.words.length; i += Action.cols) {
 			var row = $('<tr></tr>');
-			for (var c = 0; c < cols; ++c) {
-				row.append(Action.wordAsCell(words, i + c));
+			for (var c = 0; c < Action.cols; ++c) {
+				row.append(Action.wordAsCell(i + c));
 			}
 			tab.append(row);
 		}
@@ -87,10 +87,10 @@ class Action {
 		});
 	}
 
-	static wordAsCell(words, i) {
+	static wordAsCell(i) {
 		var result = $('<td></td>');
-		if (i < words.length) {
-			var w = words[i];
+		if (i < Action.words.length) {
+			var w = Action.words[i];
 			var s = w.cleanString;
 			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
 				$('<label class="btn btn-light container-fluid btn-lg word-string"><input type="checkbox" onchange="Action.updateSelected()" autocomplete="off">'+s+'</label>'),
@@ -111,7 +111,6 @@ class Action {
 				})
 				.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
 				.append('<div class="chart" data-percent="'+w.score*150+'">.'+Math.round(w.score*100)+'</div>')
-				//.addClass(w.kDegradationMean + w.backtrackCount > 0 ? 'icon-warning' : 'icon-info')
 				,
 			);
 			result.append(cell);
@@ -177,10 +176,12 @@ Action.max = 10;
 Action.dictionary = 'French proper names';
 Action.prefix = undefined;
 Action.suffix = undefined;
+Action.words = undefined;
+Action.cols = 4;
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: Action.displayWords //function(words) { Action.displayWords(words.sort(Word.SCORE_COMPARATOR).reverse()); },
+	GenerationFinished: function(words) { Action.words = words; Action.displayWords(); }
 });
 app.wordCount = 40;
 
