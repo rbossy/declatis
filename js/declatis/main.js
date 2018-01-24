@@ -92,31 +92,31 @@ class Action {
 		if (i < Action.words.length) {
 			var w = Action.words[i];
 			var s = w.cleanString;
-			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
-				$('<label class="btn btn-light container-fluid btn-lg word-string"></label>').
-				append(
-					'<input type="checkbox" onchange="Action.updateSelected()" autocomplete="off">',
-					s
-				),
-				$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
-				.popover({
-					title: '<h4>' + w.cleanString + '</h4>',
-					html: true,
-					content: (
-						'<table><tbody>'+
-						'<tr><th class="word-score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
-						'<tr><th class="word-score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
-						(w.kDegradationMean > 0 ? '<tr><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>' : '')+
-						(w.backtrackCount > 0 ? '<tr><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>' : '')+
-						'</tbody></table>'
-						),
-					trigger: 'focus',
-					placement: 'top',
-				})
-				.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
-				.append('<div class="chart" data-percent="'+w.score*150+'">.'+Math.round(w.score*100)+'</div>')
-				,
-			);
+			var cell = 
+				$('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
+					$('<label class="btn btn-light container-fluid btn-lg word-string'+(w.selected ? ' active' : '')+'"></label>').append(
+						$('<input type="checkbox" onchange="Action.select(this)" autocomplete="off">').data('word', w).prop('checked', w.selected),
+						s
+					),
+					$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
+						.popover({
+							title: '<h4>' + w.cleanString + '</h4>',
+							html: true,
+							content: (
+								'<table><tbody>'+
+								'<tr><th class="word-score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
+								'<tr><th class="word-score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
+								(w.kDegradationMean > 0 ? '<tr><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>' : '')+
+								(w.backtrackCount > 0 ? '<tr><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>' : '')+
+								'</tbody></table>'
+								),
+							trigger: 'focus',
+							placement: 'top',
+						})
+						.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
+						.append('<div class="chart" data-percent="'+w.score*150+'">.'+Math.round(w.score*100)+'</div>')
+					,
+				);
 			result.append(cell);
 		}
 		return result;
@@ -145,6 +145,12 @@ class Action {
 			return 1;
 		}
 		return 0;
+	}
+
+	static select(elt) {
+		var j = $(elt);
+		j.data('word').selected = j[0].checked;
+		Action.updateSelected();
 	}
 
 	static countSelectedWords() {
