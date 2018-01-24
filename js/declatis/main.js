@@ -93,7 +93,11 @@ class Action {
 			var w = Action.words[i];
 			var s = w.cleanString;
 			var cell = $('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
-				$('<label class="btn btn-light container-fluid btn-lg word-string"><input type="checkbox" onchange="Action.updateSelected()" autocomplete="off">'+s+'</label>'),
+				$('<label class="btn btn-light container-fluid btn-lg word-string"></label>').
+				append(
+					'<input type="checkbox" onchange="Action.updateSelected()" autocomplete="off">',
+					s
+				),
 				$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
 				.popover({
 					title: '<h4>' + w.cleanString + '</h4>',
@@ -116,6 +120,31 @@ class Action {
 			result.append(cell);
 		}
 		return result;
+	}
+
+	static sort(order) {
+		Action.words.sort(order);
+		Action.displayWords();
+	}
+
+	static ORDER_SCORE(a, b) {
+		return b.score - a.score;
+	}
+
+	static ORDER_LENGTH(a, b) {
+		return a.length - b.length;
+	}
+
+	static ORDER_ALPHA(a, b) {
+		var as = a.cleanString;
+		var bs = b.cleanString;
+		if (as < bs) {
+			return -1;
+		}
+		if (as > bs) {
+			return 1;
+		}
+		return 0;
 	}
 
 	static countSelectedWords() {
