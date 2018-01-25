@@ -93,7 +93,7 @@
 					<div class="col-6">
 					</div>
 					<div class="col-6 text-center">
-						<button id="btn-generate" type="button" class="btn btn-lg btn-success" onclick="NewAction.generate()">
+						<button id="btn-generate" type="button" class="btn btn-lg btn-success" onclick="Action.generate()">
 							<span class="icon-cycle" data-toggle="tooltip" data-placement="top" title="Regenerate"></span>
 						</button>
 					</div>
@@ -103,9 +103,9 @@
 				<div class="row">
 					<div class="col-4">
 						<div class="btn-group container-fluid" role="group" aria-label="Sort">
-							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.generated, Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.generated, Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.generated, Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(WordSet.generated, Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(WordSet.generated, Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(WordSet.generated, Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
 						</div>
 					</div>
 				</div>
@@ -118,9 +118,9 @@
 				<div class="row">
 					<div class="col-4">
 						<div class="btn-group container-fluid" role="group" aria-label="Sort">
-							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.validated, Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.validated, Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.validated, Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(WordSet.validated, Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(WordSet.validated, Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(WordSet.validated, Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
 						</div>
 					</div>
 				</div>

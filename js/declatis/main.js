@@ -1,7 +1,7 @@
 class Settings {
 	static setK(k) {
 		Settings.k = k;
-		NewAction.generate();
+		Action.generate();
 	}
 
 	static setLength(min, max) {
@@ -13,13 +13,13 @@ class Settings {
 		}
 		Settings.min = min;
 		Settings.max = max;
-		NewAction.generate();
+		Action.generate();
 	}
 
 	static setDictionary(name) {
 		Settings.dictionary = name;
 		$('#current-dictionary').text(name);
-		NewAction.generate();
+		Action.generate();
 	}
 
 	static setPrefix(prefix) {
@@ -34,7 +34,7 @@ class Settings {
 			return;
 		}
 		Settings.prefix = prefix;
-		NewAction.generate();
+		Action.generate();
 	}
 
 	static setSuffix(suffix) {
@@ -49,7 +49,7 @@ class Settings {
 			return;
 		}
 		Settings.suffix = suffix;
-		NewAction.generate();
+		Action.generate();
 	}
 
 	static ORDER_SCORE(a, b) {
@@ -106,7 +106,7 @@ class WordSet {
 	}
 
 	static dismissButton() {
-		return $('<button class="btn btn-light btn-sm word-button icon-block text-danger" onclick="NewAction.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>');
+		return $('<button class="btn btn-light btn-sm word-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>');
 	}
 }
 WordSet.generated = new WordSet(
@@ -115,7 +115,7 @@ WordSet.generated = new WordSet(
 	function(cell, w) {
 		cell.append(
 			WordSet.dismissButton(),
-			$('<button class="btn btn-light btn-sm word-button icon-check text-success" onclick="NewAction.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
+			$('<button class="btn btn-light btn-sm word-button icon-check text-success" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
 			.data('word', w)
 		);
 	}
@@ -130,14 +130,14 @@ WordSet.validated = new WordSet(
 	}
 );
 
-class NewAction {
+class Action {
 	static setLengthDisplay(min, max) {
 		$('#character-count-badge').text('' + min + '-' + max);
 	}
 
 	static validateWord(button) {
 		var w = $(button).data('word');
-		var cell = NewAction.createWordCell(WordSet.validated, w);
+		var cell = Action.createWordCell(WordSet.validated, w);
 		WordSet.validated.tableElement.prepend(cell);
 		$(button).parent().remove();
 	}
@@ -154,14 +154,14 @@ class NewAction {
 	}
 
 	static generate() {
-		var nFixed = NewAction._len(Settings.prefix) + NewAction._len(Settings.suffix);
+		var nFixed = Action._len(Settings.prefix) + Action._len(Settings.suffix);
 		app.addDefaultPattern(Settings.dictionary, Settings.k, Settings.min - nFixed, Settings.max - nFixed, Settings.prefix, Settings.suffix);
 		app.excludeTrainingWords.push(Dictionary.get(Settings.dictionary).matrix);
 		app.generate();
 	}
 
 	static sort(wordSet, order) {
-		NewAction.displayWords(wordSet, wordSet.words.sort(order));
+		Action.displayWords(wordSet, wordSet.words.sort(order));
 	}
 
 	static displayWords(wordSet, words) {
@@ -171,7 +171,7 @@ class NewAction {
 			for (var j = 0; j < wordSet.cols; ++j) {
 				var w = words[i + j];
 				if (w != undefined) {
-					var cell = NewAction.createWordCell(wordSet, w);
+					var cell = Action.createWordCell(wordSet, w);
 					table.append(wordSet, cell);
 				}
 			}
@@ -183,7 +183,7 @@ class NewAction {
 		.append(
 			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
 			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
-			.popover(NewAction.createWordPopover(w))
+			.popover(Action.createWordPopover(w))
 			.append(
 				$('<div class="chart" data-percent="'+w.score*150+'"></div>')
 				.text('.' + Math.round(w.score*100))
@@ -215,14 +215,14 @@ class NewAction {
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: function(words) { NewAction.displayWords(WordSet.generated, words); }
+	GenerationFinished: function(words) { Action.displayWords(WordSet.generated, words); }
 });
 app.wordCount = 40;
 
 $(document).ready(function() {
 	var slider = $("#character-count").slider();
 	slider.on('slideStop', function() { var v = slider.data('slider').getValue(); Settings.setLength(v[0], v[1]); });
-	slider.on('change', function() { var v = slider.data('slider').getValue(); NewAction.setLengthDisplay(v[0], v[1]); });
+	slider.on('change', function() { var v = slider.data('slider').getValue(); Action.setLengthDisplay(v[0], v[1]); });
 
 	var dicts = $('#dictionaries');
 	for (var d of Dictionary.PRESETS) {
