@@ -104,11 +104,30 @@ class WordSet {
 		$('#' + this.tableId + ' .word-button').each(function(i, e) { result.push($(e).data('word')); });
 		return result;
 	}
+
+	static dismissButton() {
+		return $('<button class="btn btn-light btn-sm word-button icon-block text-danger" onclick="NewAction.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>');
+	}
 }
 WordSet.generated = new WordSet(
 	'container-generated',
 	2,
-	function(w) { return $('<button class="btn btn-light btn-sm icon-check text-success" onclick="NewAction.selectWord()"></button>'); }
+	function(cell, w) {
+		cell.append(
+			WordSet.dismissButton(),
+			$('<button class="btn btn-light btn-sm word-button icon-check text-success" onclick="NewAction.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
+			.data('word', w)
+		);
+	}
+);
+WordSet.validated = new WordSet(
+	'container-validated',
+	2,
+	function(cell, w) {
+		cell.append(
+			WordSet.dismissButton()
+		);
+	}
 );
 
 class Action {
@@ -245,6 +264,17 @@ class Action {
 }
 
 class NewAction {
+	static validateWord(button) {
+		var w = $(button).data('word');
+		var cell = NewAction.createWordCell(WordSet.validated, w);
+		WordSet.validated.tableElement.prepend(cell);
+		$(button).parent().remove();
+	}
+
+	static dismissWord(button) {
+		$(button).parent().remove();
+	}
+
 	static _len(s) {
 		if (s === undefined) {
 			return 0;
@@ -278,7 +308,7 @@ class NewAction {
 	}
 
 	static createWordCell(wordSet, w) {
-		return $('<div class="p-2 btn-group btn-group-sm w-50" role="group" data-toggle="buttons"></div>')
+		var result = $('<div class="p-2 btn-group btn-group-sm w-50" role="group" data-toggle="buttons"></div>')
 		.append(
 			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
 			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
@@ -287,9 +317,10 @@ class NewAction {
 				$('<div class="chart" data-percent="'+w.score*150+'"></div>')
 				.text('.' + Math.round(w.score*100))
 				.easyPieChart(Settings.pieChartProperties)
-				),
-			wordSet.actionButton(w).data('word', w).addClass('word-button')
-			);
+				)
+		);
+		wordSet.actionButton(result, w);
+		return result;
 	}
 
 	static createWordPopover(w) {
