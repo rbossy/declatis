@@ -99,31 +99,22 @@
 					</div>
 				</div>
 			</div>
-			<div class="col">
+			<div class="col"> <!-- generated -->
 				<div class="row">
 					<div class="col-4">
 						<div class="btn-group container-fluid" role="group" aria-label="Sort">
-							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.generated, Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.generated, Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="NewAction.sort(WordSet.generated, Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
 						</div>
-					</div>
-					<div id="selection-tools" class="col-4">
-						<div class="btn-group container-fluid" role="group" aria-label="Selection">
-							<button id="btn-export" type="button" class="btn btn-dark icon-download" onclick="Action.export()" disabled data-toggle="tooltip" data-placement="top" title="Copy selected words to clipboard"> <span id="selected-words" class="badge badge-pill badge-info">0</span></button>
-							<button type="button" class="btn btn-dark icon-check text-success" onclick="Action.selectAll()" data-toggle="tooltip" data-placement="top" title="Select all words"></button>
-							<button type="button" class="btn btn-dark icon-block text-danger" onclick="Action.selectNone()" data-toggle="tooltip" data-placement="top" title="Unselect all words"></button>
-						</div>
-					</div>
-					<div id="alerts" class="col-4">
 					</div>
 				</div>
 				<div class="row">
-					<table class="table">
-						<tbody id="generated-words">
-						</tbody>
-					</table>
+					<div id="container-generated" class="col d-flex flex-wrap justify-content-between">
+					</div>
 				</div>
+			</div>
+			<div class="col">
 			</div>
 		</div>
 	</body>

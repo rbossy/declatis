@@ -1,7 +1,7 @@
 class Settings {
 	static setK(k) {
 		Settings.k = k;
-		Action.update();
+		NewAction.generate();
 	}
 
 	static setLength(min, max) {
@@ -13,13 +13,13 @@ class Settings {
 		}
 		Settings.min = min;
 		Settings.max = max;
-		Action.update();
+		NewAction.generate();
 	}
 
 	static setDictionary(name) {
 		Settings.dictionary = name;
 		$('#current-dictionary').text(name);
-		Action.update();
+		NewAction.generate();
 	}
 
 	static setPrefix(prefix) {
@@ -34,7 +34,7 @@ class Settings {
 			return;
 		}
 		Settings.prefix = prefix;
-		Action.update();
+		NewAction.generate();
 	}
 
 	static setSuffix(suffix) {
@@ -49,7 +49,7 @@ class Settings {
 			return;
 		}
 		Settings.suffix = suffix;
-		Action.update();
+		NewAction.generate();
 	}
 
 	static ORDER_SCORE(a, b) {
@@ -89,13 +89,26 @@ Settings.suffix = undefined;
 Settings.cols = 4;
 
 class WordSet {
-	constructor(actionButton) {
+	constructor(tableId, cols, actionButton) {
+		this.tableId = tableId;
+		this.cols = cols;
 		this.actionButton = actionButton;
-		this.words = undefined;
+	}
+
+	get tableElement() {
+		return $('#' + this.tableId);
+	}
+
+	get words() {
+		var result = [];
+		$('#' + this.tableId + ' .word-button').each(function(i, e) { result.push($(e).data('word')); });
+		return result;
 	}
 }
 WordSet.generated = new WordSet(
-	function(w) { return $('<button class="btn btn-light btn-sm icon-check"></button>').onclick(Action.selectWord); }
+	'container-generated',
+	2,
+	function(w) { return $('<button class="btn btn-light btn-sm icon-check text-success" onclick="NewAction.selectWord()"></button>'); }
 );
 
 class Action {
@@ -175,7 +188,7 @@ class Action {
 	static select(elt) {
 		var j = $(elt);
 		j.data('word').selected = j[0].checked;
-		Action.updateSelected();
+		NewAction.generateSelected();
 	}
 
 	static countSelectedWords() {
@@ -197,13 +210,13 @@ class Action {
 	static selectAll() {
 		$('.word-string input').prop('checked', true);
 		$('.word-string').addClass('active');
-		Action.updateSelected();
+		NewAction.generateSelected();
 	}
 
 	static selectNone() {
 		$('.word-string input').prop('checked', false);
 		$('.word-string').removeClass('active');
-		Action.updateSelected();
+		NewAction.generateSelected();
 	}
 
 	static selectedWordsArray() {
@@ -232,27 +245,51 @@ class Action {
 }
 
 class NewAction {
-	static createWordCell(wordSet, w) {
-		var result = $('<td></td>');
-		if (w !== undefined) {
-			var s = w.cleanString;
-			result.append(
-				$('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>')
-				.append(
-					$('<label class="btn btn-light container-fluid btn-lg word-string"></label>').text(s),
-					$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
-					.popover(Action.createWordPopover(w))
-					.append(
-						$('<div class="chart"></div>')
-						.text('.' + Math.round(w.score*100))
-						.data('percent', w.score*150)
-						.easyPieChart(Settings.pieChartProperties)
-					),
-					wordSet.actionButton(w).data('word', w)
-				)
-			)
+	static _len(s) {
+		if (s === undefined) {
+			return 0;
 		}
-		return result;
+		return s.length;
+	}
+
+	static generate() {
+		var nFixed = NewAction._len(Settings.prefix) + NewAction._len(Settings.suffix);
+		app.addDefaultPattern(Settings.dictionary, Settings.k, Settings.min - nFixed, Settings.max - nFixed, Settings.prefix, Settings.suffix);
+		app.excludeTrainingWords.push(Dictionary.get(Settings.dictionary).matrix);
+		app.generate();
+	}
+
+	static sort(wordSet, order) {
+		NewAction.displayWords(wordSet, wordSet.words.sort(order));
+	}
+
+	static displayWords(wordSet, words) {
+		var table = wordSet.tableElement;
+		table.empty();
+		for (var i = 0; i < words.length; i += wordSet.cols) {
+			for (var j = 0; j < wordSet.cols; ++j) {
+				var w = words[i + j];
+				if (w != undefined) {
+					var cell = NewAction.createWordCell(wordSet, w);
+					table.append(wordSet, cell);
+				}
+			}
+		}
+	}
+
+	static createWordCell(wordSet, w) {
+		return $('<div class="p-2 btn-group btn-group-sm w-50" role="group" data-toggle="buttons"></div>')
+		.append(
+			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
+			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
+			.popover(NewAction.createWordPopover(w))
+			.append(
+				$('<div class="chart" data-percent="'+w.score*150+'"></div>')
+				.text('.' + Math.round(w.score*100))
+				.easyPieChart(Settings.pieChartProperties)
+				),
+			wordSet.actionButton(w).data('word', w).addClass('word-button')
+			);
 	}
 
 	static createWordPopover(w) {
@@ -276,7 +313,7 @@ class NewAction {
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: function(words) { WordSet.generated = words; Action.displayWords(); }
+	GenerationFinished: function(words) { NewAction.displayWords(WordSet.generated, words); }
 });
 app.wordCount = 40;
 
