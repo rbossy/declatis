@@ -55,15 +55,15 @@
 					<div class="col">
 						<div id="k-button-group" class="btn-group container-fluid" data-toggle="buttons">
 							<label class="btn btn-sm btn-primary container-fluid">
-								<input type="radio" name="familiarity" onchange="Action.setK(1)">
+								<input type="radio" name="familiarity" onchange="Settings.setK(1)">
 								Low
 							</label>
 							<label class="btn btn-sm btn-primary container-fluid active">
-								<input type="radio" name="familiarity" onchange="Action.setK(2)" checked>
+								<input type="radio" name="familiarity" onchange="Settings.setK(2)" checked>
 								Moderate
 							</label>
 							<label class="btn btn-sm btn-primary container-fluid">
-								<input type="radio" name="familiarity" onchange="Action.setK(3)">
+								<input type="radio" name="familiarity" onchange="Settings.setK(3)">
 								High
 							</label>
 						</div>
@@ -83,10 +83,10 @@
 						Prefix &amp; suffix
 					</div>
 					<div class="col-3">
-						<input id="prefix" type="text" style="width: 100%;" oninput="Action.setPrefix()">
+						<input id="prefix" type="text" style="width: 100%;" oninput="Settings.setPrefix()">
 					</div>
 					<div class="col-3">
-						<input id="suffix" type="text" style="width: 100%;" oninput="Action.setSuffix()">
+						<input id="suffix" type="text" style="width: 100%;" oninput="Settings.setSuffix()">
 					</div>
 				</div>
 				<div class="row form-row">
@@ -103,9 +103,9 @@
 				<div class="row">
 					<div class="col-4">
 						<div class="btn-group container-fluid" role="group" aria-label="Sort">
-							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Action.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Action.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
-							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Action.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
+							<button type="button" class="btn btn-secondary btn-sort" onclick="Action.sort(Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
 						</div>
 					</div>
 					<div id="selection-tools" class="col-4">

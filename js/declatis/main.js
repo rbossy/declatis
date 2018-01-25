@@ -1,25 +1,23 @@
-class Action {
+class Settings {
 	static setK(k) {
-		Action.k = k;
+		Settings.k = k;
 		Action.update();
 	}
 
 	static setLength(min, max) {
-		if (min === Action.min && max === Action.max) {
+		if (min === Settings.min && max === Settings.max) {
 			return;
 		}
 		if (min === max) {
 			return; //
 		}
-		Action.min = min;
-		Action.max = max;
-		console.log(min);
-		console.log(max);
+		Settings.min = min;
+		Settings.max = max;
 		Action.update();
 	}
 
 	static setDictionary(name) {
-		Action.dictionary = name;
+		Settings.dictionary = name;
 		$('#current-dictionary').text(name);
 		Action.update();
 	}
@@ -32,10 +30,10 @@ class Action {
 		if (prefix === '') {
 			prefix = undefined;
 		}
-		if (prefix === Action.prefix) {
+		if (prefix === Settings.prefix) {
 			return;
 		}
-		Action.prefix = prefix;
+		Settings.prefix = prefix;
 		Action.update();
 	}
 
@@ -47,13 +45,60 @@ class Action {
 		if (suffix === '') {
 			suffix = undefined;
 		}
-		if (suffix === Action.suffix) {
+		if (suffix === Settings.suffix) {
 			return;
 		}
-		Action.suffix = suffix;
+		Settings.suffix = suffix;
 		Action.update();
 	}
 
+	static ORDER_SCORE(a, b) {
+		return b.score - a.score;
+	}
+
+	static ORDER_LENGTH(a, b) {
+		return a.length - b.length;
+	}
+
+	static ORDER_ALPHA(a, b) {
+		var as = a.cleanString;
+		var bs = b.cleanString;
+		if (as < bs) {
+			return -1;
+		}
+		if (as > bs) {
+			return 1;
+		}
+		return 0;
+	}
+}
+Settings.pieChartProperties =
+{
+	size: 20,
+	lineWidth: 2,
+	trackColor: '#DDDDDD',
+	scaleColor: false,
+	barColor: '#444444'
+};
+Settings.k = 2;
+Settings.min = 6;
+Settings.max = 10;
+Settings.dictionary = 'French proper names';
+Settings.prefix = undefined;
+Settings.suffix = undefined;
+Settings.cols = 4;
+
+class WordSet {
+	constructor(actionButton) {
+		this.actionButton = actionButton;
+		this.words = undefined;
+	}
+}
+WordSet.generated = new WordSet(
+	function(w) { return $('<button class="btn btn-light btn-sm icon-check"></button>').onclick(Action.selectWord); }
+);
+
+class Action {
 	static _len(s) {
 		if (s === undefined) {
 			return 0;
@@ -62,18 +107,18 @@ class Action {
 	}
 
 	static update() {
-		var nFixed = Action._len(Action.prefix) + Action._len(Action.suffix);
-		app.addDefaultPattern(Action.dictionary, Action.k, Action.min - nFixed, Action.max - nFixed, Action.prefix, Action.suffix);
-		app.excludeTrainingWords.push(Dictionary.get(Action.dictionary).matrix);
+		var nFixed = Action._len(Settings.prefix) + Action._len(Settings.suffix);
+		app.addDefaultPattern(Settings.dictionary, Settings.k, Settings.min - nFixed, Settings.max - nFixed, Settings.prefix, Settings.suffix);
+		app.excludeTrainingWords.push(Dictionary.get(Settings.dictionary).matrix);
 		app.generate();
 	}
 
 	static displayWords() {
 		var tab = $('#generated-words');
 		tab.empty();
-		for (var i = 0; i < Action.words.length; i += Action.cols) {
+		for (var i = 0; i < WordSet.generated.length; i += Settings.cols) {
 			var row = $('<tr></tr>');
-			for (var c = 0; c < Action.cols; ++c) {
+			for (var c = 0; c < Settings.cols; ++c) {
 				row.append(Action.wordAsCell(i + c));
 			}
 			tab.append(row);
@@ -89,8 +134,8 @@ class Action {
 
 	static wordAsCell(i) {
 		var result = $('<td></td>');
-		if (i < Action.words.length) {
-			var w = Action.words[i];
+		if (i < WordSet.generated.length) {
+			var w = WordSet.generated[i];
 			var s = w.cleanString;
 			var cell = 
 				$('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>').append(
@@ -123,28 +168,8 @@ class Action {
 	}
 
 	static sort(order) {
-		Action.words.sort(order);
+		WordSet.generated.sort(order);
 		Action.displayWords();
-	}
-
-	static ORDER_SCORE(a, b) {
-		return b.score - a.score;
-	}
-
-	static ORDER_LENGTH(a, b) {
-		return a.length - b.length;
-	}
-
-	static ORDER_ALPHA(a, b) {
-		var as = a.cleanString;
-		var bs = b.cleanString;
-		if (as < bs) {
-			return -1;
-		}
-		if (as > bs) {
-			return 1;
-		}
-		return 0;
 	}
 
 	static select(elt) {
@@ -205,24 +230,59 @@ class Action {
 		$('#character-count-badge').text('' + min + '-' + max);
 	}
 }
-Action.k = 2;
-Action.min = 6;
-Action.max = 10;
-Action.dictionary = 'French proper names';
-Action.prefix = undefined;
-Action.suffix = undefined;
-Action.words = undefined;
-Action.cols = 4;
+
+class NewAction {
+	static createWordCell(wordSet, w) {
+		var result = $('<td></td>');
+		if (w !== undefined) {
+			var s = w.cleanString;
+			result.append(
+				$('<div class="btn-group container-fluid btn-group-sm" role="group" data-toggle="buttons"></div>')
+				.append(
+					$('<label class="btn btn-light container-fluid btn-lg word-string"></label>').text(s),
+					$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
+					.popover(Action.createWordPopover(w))
+					.append(
+						$('<div class="chart"></div>')
+						.text('.' + Math.round(w.score*100))
+						.data('percent', w.score*150)
+						.easyPieChart(Settings.pieChartProperties)
+					),
+					wordSet.actionButton(w).data('word', w)
+				)
+			)
+		}
+		return result;
+	}
+
+	static createWordPopover(w) {
+		return {
+			title: '<h4>' + w.cleanString + '</h4>',
+			html: true,
+			content: (
+				'<table><tbody>'+
+				'<tr><th class="word-score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
+				'<tr><th class="word-score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
+				(w.kDegradationMean > 0 ? '<tr><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>' : '')+
+				(w.backtrackCount > 0 ? '<tr><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>' : '')+
+				'</tbody></table>'
+				),
+			trigger: 'focus',
+			placement: 'top',
+		}
+	}
+}
+
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: function(words) { Action.words = words; Action.displayWords(); }
+	GenerationFinished: function(words) { WordSet.generated = words; Action.displayWords(); }
 });
 app.wordCount = 40;
 
 $(document).ready(function() {
 	var slider = $("#character-count").slider();
-	slider.on('slideStop', function() { var v = slider.data('slider').getValue(); Action.setLength(v[0], v[1]); });
+	slider.on('slideStop', function() { var v = slider.data('slider').getValue(); Settings.setLength(v[0], v[1]); });
 	slider.on('change', function() { var v = slider.data('slider').getValue(); Action.setLengthDisplay(v[0], v[1]); });
 
 	var dicts = $('#dictionaries');
@@ -230,5 +290,5 @@ $(document).ready(function() {
 		dicts.append('<a class="dropdown-item" href="#" onclick="Action.setDictionary(\'' + d.name + '\')">' + d.name + '</a>');
 	}
 
-	Action.setDictionary('French proper names');
+	Settings.setDictionary('French proper names');
 });
