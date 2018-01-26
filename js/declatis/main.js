@@ -257,6 +257,8 @@ $(document).ready(function() {
 	slider.on('slideStop', function() { var v = slider.data('slider').getValue(); Settings.setLength(v[0], v[1]); });
 	slider.on('change', function() { var v = slider.data('slider').getValue(); Action.setLengthDisplay(v[0], v[1]); });
 
+	$('#prefix').val(''); // fix firefox bug
+
 	var dicts = $('#dictionaries');
 	for (var d of Dictionary.PRESETS) {
 		dicts.append('<a class="dropdown-item" href="#" onclick="Settings.setDictionary(\'' + d.name + '\')">' + d.name + '</a>');
