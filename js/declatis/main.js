@@ -86,11 +86,18 @@ Settings.max = 10;
 Settings.dictionary = 'French proper names';
 Settings.prefix = undefined;
 Settings.suffix = undefined;
+Settings.familiarities = [
+	undefined,
+	'Low',
+	'Moderate',
+	'Hight'
+];
 
 class WordSet {
-	constructor(containerId, actionButton) {
+	constructor(containerId, actionButton, extendedPopover) {
 		this.containerId = containerId;
 		this.actionButton = actionButton;
+		this.extendedPopover = extendedPopover;
 	}
 
 	get containerElement() {
@@ -115,7 +122,8 @@ WordSet.generated = new WordSet(
 			$('<button class="btn btn-light btn-sm word-button icon-check text-success" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
 			.data('word', w)
 		);
-	}
+	},
+	false
 );
 WordSet.validated = new WordSet(
 	'container-validated',
@@ -123,7 +131,8 @@ WordSet.validated = new WordSet(
 		cell.append(
 			WordSet.dismissButton()
 		);
-	}
+	},
+	true
 );
 
 class Action {
@@ -163,14 +172,9 @@ class Action {
 	static displayWords(wordSet, words) {
 		var container = wordSet.containerElement;
 		container.empty();
-		for (var i = 0; i < words.length; i += wordSet.cols) {
-			for (var j = 0; j < wordSet.cols; ++j) {
-				var w = words[i + j];
-				if (w != undefined) {
-					var cell = Action.createWordCell(wordSet, w);
-					container.append(wordSet, cell);
-				}
-			}
+		for (var w of words) {
+			var cell = Action.createWordCell(wordSet, w);
+			container.append(wordSet, cell);
 		}
 	}
 
@@ -179,7 +183,7 @@ class Action {
 		.append(
 			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
 			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
-			.popover(Action.createWordPopover(w))
+			.popover(Action.createWordPopover(wordSet, w))
 			.append(
 				$('<div class="chart" data-percent="'+w.score*150+'"></div>')
 				.text('.' + Math.round(w.score*100))
@@ -190,18 +194,51 @@ class Action {
 		return result;
 	}
 
-	static createWordPopover(w) {
+	static popoverRow(th, td) {
+		return '<tr><th class="word-score">'+th+'</th><td>'+td+'</td></tr>';
+	}
+
+	static getWordPatternMarkovian(w) {
+		for (var gen of w.pattern.generators) {
+			if (gen instanceof Markovian) {
+				return gen;
+			}
+		}
+	}
+
+	static createWordPopoverContent(wordSet, w) {
+		var result = '<table><tbody>';
+		if (wordSet.extendedPopover) {
+			var mark = Action.getWordPatternMarkovian(w);
+			result += Action.popoverRow('Dictionary', mark.matrix.name);
+			result += Action.popoverRow('Familiarity', Settings.familiarities[mark.k]);
+			var fixed = 0;
+			var prefix = w.pattern.generators[0].value;
+			if (prefix) {
+				result += Action.popoverRow('Prefix', prefix);
+				fixed += prefix.length;
+			}
+			var suffix = w.pattern.generators[w.pattern.generators.length-1].value;
+			if (prefix) {
+				result += Action.popoverRow('Suffix', suffix);
+				fixed += suffix.len;
+			}
+			result += Action.popoverRow('Length', '' + (mark.min+fixed) + '-' + (mark.max+fixed));
+		}
+		result +=
+			Action.popoverRow('Score', w.score.toFixed(4)) +
+			Action.popoverRow('Mean probability', w.meanProbability.toFixed(2)) +
+			(w.kDegradationMean > 0 ? Action.popoverRow('Degradation', w.kDegradationMean.toFixed(2)) : '') +
+			(w.backtrackCount > 0 ? Action.popoverRow('Backtracks', w.backtrackCount) : '') +
+			'</tbody></table>';
+		return result;
+	}
+
+	static createWordPopover(wordSet, w) {
 		return {
 			title: '<h4>' + w.cleanString + '</h4>',
 			html: true,
-			content: (
-				'<table><tbody>'+
-				'<tr><th class="word-score">Score</th><td>'+w.score.toFixed(4)+'</td></tr>'+
-				'<tr><th class="word-score">Mean probability</th><td>'+w.meanProbability.toFixed(2)+'</td></tr>'+
-				(w.kDegradationMean > 0 ? '<tr><th class="word-score">Degradation</th><td>'+w.kDegradationMean.toFixed(2)+'</td></tr>' : '')+
-				(w.backtrackCount > 0 ? '<tr><th class="word-score">Backtracks</th><td>'+w.backtrackCount+'</td></tr>' : '')+
-				'</tbody></table>'
-				),
+			content: Action.createWordPopoverContent(wordSet, w),
 			trigger: 'focus',
 			placement: 'top',
 		}
