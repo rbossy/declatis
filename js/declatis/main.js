@@ -86,22 +86,20 @@ Settings.max = 10;
 Settings.dictionary = 'French proper names';
 Settings.prefix = undefined;
 Settings.suffix = undefined;
-Settings.cols = 4;
 
 class WordSet {
-	constructor(tableId, cols, actionButton) {
-		this.tableId = tableId;
-		this.cols = cols;
+	constructor(containerId, actionButton) {
+		this.containerId = containerId;
 		this.actionButton = actionButton;
 	}
 
-	get tableElement() {
-		return $('#' + this.tableId);
+	get containerElement() {
+		return $('#' + this.containerId);
 	}
 
 	get words() {
 		var result = [];
-		$('#' + this.tableId + ' .word-button').each(function(i, e) { result.push($(e).data('word')); });
+		$('#' + this.containerId + ' .word-button').each(function(i, e) { result.push($(e).data('word')); });
 		return result;
 	}
 
@@ -111,7 +109,6 @@ class WordSet {
 }
 WordSet.generated = new WordSet(
 	'container-generated',
-	2,
 	function(cell, w) {
 		cell.append(
 			WordSet.dismissButton(),
@@ -122,7 +119,6 @@ WordSet.generated = new WordSet(
 );
 WordSet.validated = new WordSet(
 	'container-validated',
-	2,
 	function(cell, w) {
 		cell.append(
 			WordSet.dismissButton()
@@ -138,7 +134,7 @@ class Action {
 	static validateWord(button) {
 		var w = $(button).data('word');
 		var cell = Action.createWordCell(WordSet.validated, w);
-		WordSet.validated.tableElement.prepend(cell);
+		WordSet.validated.containerElement.prepend(cell);
 		$(button).parent().remove();
 	}
 
@@ -165,14 +161,14 @@ class Action {
 	}
 
 	static displayWords(wordSet, words) {
-		var table = wordSet.tableElement;
-		table.empty();
+		var container = wordSet.containerElement;
+		container.empty();
 		for (var i = 0; i < words.length; i += wordSet.cols) {
 			for (var j = 0; j < wordSet.cols; ++j) {
 				var w = words[i + j];
 				if (w != undefined) {
 					var cell = Action.createWordCell(wordSet, w);
-					table.append(wordSet, cell);
+					container.append(wordSet, cell);
 				}
 			}
 		}
