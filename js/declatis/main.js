@@ -106,7 +106,7 @@ class WordSet {
 
 	get words() {
 		var result = [];
-		$('#' + this.containerId + ' .word-button').each(function(i, e) { result.push($(e).data('word')); });
+		$('#' + this.containerId + ' .validate-button').each(function(i, e) { result.push($(e).data('word')); });
 		return result;
 	}
 
@@ -119,7 +119,7 @@ WordSet.generated = new WordSet(
 	function(cell, w) {
 		cell.append(
 			WordSet.dismissButton(),
-			$('<button class="btn btn-light btn-sm word-button icon-check text-success" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
+			$('<button class="btn btn-light btn-sm word-button icon-check text-success validate-button" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
 			.data('word', w)
 		);
 	},
@@ -149,6 +149,14 @@ class Action {
 
 	static dismissWord(button) {
 		$(button).parent().remove();
+	}
+
+	static allWords(wordSet, fun) {
+		$('#' + wordSet.containerId + ' .validate-button').each(function(i, e) { fun(e); });
+	}
+
+	static sendToClipboard() {
+		
 	}
 
 	static _len(s) {
