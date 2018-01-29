@@ -106,19 +106,20 @@ class WordSet {
 
 	get words() {
 		var result = [];
-		$('#' + this.containerId + ' .validate-button').each(function(i, e) { result.push($(e).data('word')); });
+		$('#' + this.containerId + ' .dismiss-button').each(function(i, e) { result.push($(e).data('word')); });
 		return result;
 	}
 
-	static dismissButton() {
-		return $('<button class="btn btn-light btn-sm word-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>');
+	static dismissButton(w) {
+		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>')
+		.data('word', w);
 	}
 }
 WordSet.generated = new WordSet(
 	'container-generated',
 	function(cell, w) {
 		cell.append(
-			WordSet.dismissButton(),
+			WordSet.dismissButton(w),
 			$('<button class="btn btn-light btn-sm word-button icon-check text-success validate-button" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
 			.data('word', w)
 		);
@@ -129,7 +130,7 @@ WordSet.validated = new WordSet(
 	'container-validated',
 	function(cell, w) {
 		cell.append(
-			WordSet.dismissButton()
+			WordSet.dismissButton(w)
 		);
 	},
 	true
@@ -152,11 +153,17 @@ class Action {
 	}
 
 	static allWords(wordSet, fun) {
-		$('#' + wordSet.containerId + ' .validate-button').each(function(i, e) { fun(e); });
+		$('#' + wordSet.containerId + ' .dismiss-button').each(function(i, e) { fun(e); });
 	}
 
-	static sendToClipboard() {
-		
+	static export() {
+		var $temp = $("<textarea></textarea>");
+		$("body").append($temp);
+		var words = WordSet.validated.words;
+		var wordStrings = words.map(function(w) { return w.cleanString; });
+		$temp.val(wordStrings.join('\n')+'\n').select();
+		document.execCommand("copy");
+		$temp.remove();
 	}
 
 	static _len(s) {
