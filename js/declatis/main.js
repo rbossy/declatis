@@ -184,6 +184,7 @@ class Action {
 			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
 			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
 			.popover(Action.createWordPopover(wordSet, w))
+			.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
 			.append(
 				$('<div class="chart" data-percent="'+w.score*150+'"></div>')
 				.text('.' + Math.round(w.score*100))
