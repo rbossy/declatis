@@ -62,3 +62,13 @@
 .word-set {
 	margin-bottom: 5mm;
 }
+
+.word-container {
+	padding-top: 2mm;
+}
+
+#container-validated {
+	background-color: #CCCCCC;
+	min-height: 26mm;
+	border-radius: 3mm;
+}
