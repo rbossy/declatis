@@ -76,3 +76,11 @@
 #validatedCount {
 	font-family: sans-serif;
 }
+
+#alert-row {
+	min-height: 18mm;
+}
+
+.alert {
+	margin-right: 1mm;
+}

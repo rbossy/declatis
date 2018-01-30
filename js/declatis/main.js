@@ -111,7 +111,7 @@ class WordSet {
 	}
 
 	static dismissButton(w) {
-		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>')
+		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this, true)" data-toggle="tooltip" title="Dismiss word"></button>')
 		.data('word', w);
 	}
 }
@@ -137,12 +137,43 @@ WordSet.validated = new WordSet(
 );
 
 class Action {
+	static alert(level, message) {
+		$('#alert-row').append(
+			$('<div class="alert alert-dismissible" role="alert">')
+			.addClass('alert-'+level)
+			.append(
+				$('<span  style="margin-right: 5mm"></span>')
+				.text(message.replace(/\n/g, '<br>')),
+				$('<button type="button" class="close" data-dismiss="alert"></button>')
+				.append('<span>&times;</span>')
+			)
+			.fadeTo(5000, 1, function() { $(this).fadeOut(500); })
+		);
+		//'<div class="alert alert-'+level+' alert-dismissible" role="alert">'+message.replace(/\n/g, '<br>')+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+	}
+
+	static error(message) {
+		Alert.alert('danger', message);
+	}
+
+	static warning(message) {
+		Action.alert('warning', message);
+	}
+
+	static clear() {
+		$('.alert').remove();
+	}
+
 	static setLengthDisplay(min, max) {
 		$('#character-count-badge').text('' + min + '-' + max);
 	}
 
+	static getValidatedCount() {
+		return $('#' + WordSet.validated.containerId + ' .dismiss-button').length;
+	}
+
 	static updateValidatedCount() {
-		var count = $('#' + WordSet.validated.containerId + ' .dismiss-button').length;
+		var count = Action.getValidatedCount();
 		$('#validated-count').text(count);
 	}
 
@@ -164,18 +195,25 @@ class Action {
 		Action.updateToolButtons(WordSet.validated);
 	}
 
-	static dismissWord(button) {
+	static dismissWord(button, alert) {
+		var w = $(button).data('word');
 		$(button).parent().remove();
 		Action.updateValidatedCount();
 		Action.updateToolButtons(WordSet.generated);
 		Action.updateToolButtons(WordSet.validated);
+		if (alert) {
+			Action.warning('Dismissed: ' + w.cleanString);
+		}
 	}
 
-	static allWords(wordSet, fun) {
+	static allWords(wordSet, fun, level, message) {
 		$('#' + wordSet.containerId + ' .dismiss-button').each(function(i, e) { fun(e); });
 		Action.updateValidatedCount();
 		Action.updateToolButtons(WordSet.generated);
 		Action.updateToolButtons(WordSet.validated);
+		if (level) {
+			Action.alert(level, message)
+		}
 	}
 
 	static export() {
@@ -186,6 +224,7 @@ class Action {
 		$temp.val(wordStrings.join('\n')+'\n').select();
 		document.execCommand("copy");
 		$temp.remove();
+		Action.alert('success', 'Sent '+Action.getValidatedCount()+' words to clipboard');
 	}
 
 	static _len(s) {
