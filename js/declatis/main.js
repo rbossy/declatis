@@ -180,8 +180,6 @@ class Action {
 	static updateToolButtons(wordSet) {
 		var count = $('#' + wordSet.containerId + ' .dismiss-button').length;
 		var disabled = (count === 0);
-		console.log(wordSet);
-		console.log(disabled);
 		$('#' + wordSet.containerId).parent().parent().find(' .btn-tool').prop('disabled', disabled);
 	}
 
