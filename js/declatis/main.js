@@ -141,19 +141,41 @@ class Action {
 		$('#character-count-badge').text('' + min + '-' + max);
 	}
 
+	static updateValidatedCount() {
+		var count = $('#' + WordSet.validated.containerId + ' .dismiss-button').length;
+		$('#validated-count').text(count);
+	}
+
+	static updateToolButtons(wordSet) {
+		var count = $('#' + wordSet.containerId + ' .dismiss-button').length;
+		var disabled = (count === 0);
+		console.log(wordSet);
+		console.log(disabled);
+		$('#' + wordSet.containerId).parent().parent().find(' .btn-tool').prop('disabled', disabled);
+	}
+
 	static validateWord(button) {
 		var w = $(button).data('word');
 		var cell = Action.createWordCell(WordSet.validated, w);
 		WordSet.validated.containerElement.prepend(cell);
 		$(button).parent().remove();
+		Action.updateValidatedCount();
+		Action.updateToolButtons(WordSet.generated);
+		Action.updateToolButtons(WordSet.validated);
 	}
 
 	static dismissWord(button) {
 		$(button).parent().remove();
+		Action.updateValidatedCount();
+		Action.updateToolButtons(WordSet.generated);
+		Action.updateToolButtons(WordSet.validated);
 	}
 
 	static allWords(wordSet, fun) {
 		$('#' + wordSet.containerId + ' .dismiss-button').each(function(i, e) { fun(e); });
+		Action.updateValidatedCount();
+		Action.updateToolButtons(WordSet.generated);
+		Action.updateToolButtons(WordSet.validated);
 	}
 
 	static export() {
@@ -178,6 +200,7 @@ class Action {
 		app.addDefaultPattern(Settings.dictionary, Settings.k, Settings.min - nFixed, Settings.max - nFixed, Settings.prefix, Settings.suffix);
 		app.excludeTrainingWords.push(Dictionary.get(Settings.dictionary).matrix);
 		app.generate();
+		Action.updateToolButtons(WordSet.generated);
 	}
 
 	static sort(wordSet, order) {

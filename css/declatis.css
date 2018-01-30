@@ -72,3 +72,7 @@
 	min-height: 26mm;
 	border-radius: 3mm;
 }
+
+#validatedCount {
+	font-family: sans-serif;
+}
