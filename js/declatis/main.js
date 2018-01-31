@@ -143,7 +143,7 @@ class Action {
 			.addClass('alert-'+level)
 			.append(
 				$('<span  style="margin-right: 5mm"></span>')
-				.text(message.replace(/\n/g, '<br>')),
+				.append(message),
 				$('<button type="button" class="close" data-dismiss="alert"></button>')
 				.append('<span>&times;</span>')
 			)
@@ -200,8 +200,20 @@ class Action {
 		Action.updateToolButtons(WordSet.generated);
 		Action.updateToolButtons(WordSet.validated);
 		if (alert) {
-			Action.warning('Dismissed: ' + w.cleanString);
+			var undo = $('<a class="btn btn-sm btn-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
+			.data('words', [w])
+			.click(Action.undoDismiss);
+			Action.warning(['Dismissed: ', w.cleanString, undo]);
 		}
+	}
+
+	static undoDismiss() {
+		var words = $(this).data('words');
+		for (var w of words) {
+			var cell = Action.createWordCell(w.wordSet, w);
+			w.wordSet.containerElement.prepend(cell);
+		}
+		$(this).parent().alert('close');
 	}
 
 	static allWords(wordSet, fun, level, message) {
@@ -249,7 +261,7 @@ class Action {
 		container.empty();
 		for (var w of words) {
 			var cell = Action.createWordCell(wordSet, w);
-			container.append(wordSet, cell);
+			container.append(cell);
 		}
 	}
 
@@ -267,6 +279,7 @@ class Action {
 				)
 		);
 		wordSet.actionButton(result, w);
+		w.wordSet = wordSet;
 		return result;
 	}
 
