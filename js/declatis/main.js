@@ -207,6 +207,18 @@ class Action {
 		}
 	}
 
+	static dismissAll(wordSet, message) {
+		var words = wordSet.words;
+		$('#' + wordSet.containerId + ' .dismiss-button').parent().remove();
+		Action.updateValidatedCount();
+		Action.updateToolButtons(WordSet.generated);
+		Action.updateToolButtons(WordSet.validated);
+		var undo = $('<a class="btn btn-sm btn-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
+		.data('words', words)
+		.click(Action.undoDismiss);
+		Action.warning([message, undo]);
+	}
+
 	static undoDismiss() {
 		var words = $(this).data('words');
 		for (var w of words) {
@@ -214,6 +226,9 @@ class Action {
 			w.wordSet.containerElement.prepend(cell);
 		}
 		$(this).parent().alert('close');
+		Action.updateValidatedCount();
+		Action.updateToolButtons(WordSet.generated);
+		Action.updateToolButtons(WordSet.validated);
 	}
 
 	static allWords(wordSet, fun, level, message) {
