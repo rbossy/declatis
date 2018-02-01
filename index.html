@@ -116,7 +116,7 @@
 							</div>
 							<div class="col-4">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-light btn-lg text-danger icon-block btn-tool" data-toggle="tooltip" title="Dismiss all" onclick="Action.dismissAll(WordSet.generated, 'Dismissed all generated words')"></button>
+									<button type="button" class="btn btn-light btn-lg text-danger icon-block btn-tool" data-toggle="tooltip" title="Dismiss all" onclick="Action.dismissAll(WordSet.generated)"></button>
 									<button type="button" class="btn btn-light text-success icon-check btn-tool" data-toggle="tooltip" title="Validate all" onclick="Action.allWords(WordSet.generated, Action.validateWord)"></button>
 								</div>
 							</div>
@@ -139,7 +139,7 @@
 							</div>
 							<div class="col-4">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-light btn-lg text-danger icon-block btn-tool" data-toggle="tooltip" title="Dismiss all" onclick="Action.dismissAll(WordSet.validated, 'Dismissed all validated words')" disabled></button>
+									<button type="button" class="btn btn-light btn-lg text-danger icon-block btn-tool" data-toggle="tooltip" title="Dismiss all" onclick="Action.dismissAll(WordSet.validated)" disabled></button>
 									<button type="button" class="btn btn-light icon-export btn-tool" data-toggle="tooltip" title="Send to clipboard" onclick="Action.export()" disabled>
 										<span id="validated-count" class="badge badge-pill badge-primary">0</span>
 									</button>

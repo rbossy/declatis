@@ -94,8 +94,9 @@ Settings.familiarities = [
 ];
 
 class WordSet {
-	constructor(containerId, actionButton, extendedPopover) {
+	constructor(containerId, adjective, actionButton, extendedPopover) {
 		this.containerId = containerId;
+		this.adjective = adjective;
 		this.actionButton = actionButton;
 		this.extendedPopover = extendedPopover;
 	}
@@ -111,12 +112,13 @@ class WordSet {
 	}
 
 	static dismissButton(w) {
-		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this, true)" data-toggle="tooltip" title="Dismiss word"></button>')
+		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>')
 		.data('word', w);
 	}
 }
 WordSet.generated = new WordSet(
 	'container-generated',
+	'generated',
 	function(cell, w) {
 		cell.append(
 			WordSet.dismissButton(w),
@@ -128,6 +130,7 @@ WordSet.generated = new WordSet(
 );
 WordSet.validated = new WordSet(
 	'container-validated',
+	'generated',
 	function(cell, w) {
 		cell.append(
 			WordSet.dismissButton(w)
@@ -193,18 +196,25 @@ class Action {
 		Action.updateToolButtons(WordSet.validated);
 	}
 
-	static dismissWord(button, alert) {
+	static validateAll() {
+		var words = WordSet.generated.words;
+		for (var w of words) {
+			var cell = Action.createWordCell(WordSet.validated, w);
+			WordSet.validated.containerElement.prepend(cell);
+		}
+		$('#' + WordSet.generated.containerId + ' .dismiss-button').parent().remove();
+		Action.updateValidatedCount();
+		Action.updateToolButtons(WordSet.generated);
+		Action.updateToolButtons(WordSet.validated);
+	}
+
+	static dismissWord(button) {
 		var w = $(button).data('word');
 		$(button).parent().remove();
 		Action.updateValidatedCount();
 		Action.updateToolButtons(WordSet.generated);
 		Action.updateToolButtons(WordSet.validated);
-		if (alert) {
-			var undo = $('<a class="btn btn-sm btn-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
-			.data('words', [w])
-			.click(Action.undoDismiss);
-			Action.warning(['Dismissed: ', w.cleanString, undo]);
-		}
+		Action.createDismissAlert([w], 'Dismissed: ' + w.cleanString);
 	}
 
 	static dismissAll(wordSet, message) {
@@ -213,6 +223,10 @@ class Action {
 		Action.updateValidatedCount();
 		Action.updateToolButtons(WordSet.generated);
 		Action.updateToolButtons(WordSet.validated);
+		Action.createDismissAlert(words, 'Dismissed all ' + wordSet.adjective + ' words');
+	}
+
+	static createDismissAlert(words, message) {
 		var undo = $('<a class="btn btn-sm btn-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
 		.data('words', words)
 		.click(Action.undoDismiss);
@@ -229,16 +243,6 @@ class Action {
 		Action.updateValidatedCount();
 		Action.updateToolButtons(WordSet.generated);
 		Action.updateToolButtons(WordSet.validated);
-	}
-
-	static allWords(wordSet, fun, level, message) {
-		$('#' + wordSet.containerId + ' .dismiss-button').each(function(i, e) { fun(e); });
-		Action.updateValidatedCount();
-		Action.updateToolButtons(WordSet.generated);
-		Action.updateToolButtons(WordSet.validated);
-		if (level) {
-			Action.alert(level, message)
-		}
 	}
 
 	static export() {
