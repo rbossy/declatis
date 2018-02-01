@@ -201,7 +201,7 @@ class Widget {
 	}
 
 	static createWordCell(wordSet, w) {
-		var result = $('<div class="p-2 btn-group btn-group-sm w-50" role="group" data-toggle="buttons"></div>')
+		var result = $('<div class="p-2 btn-group btn-group-sm w-50 word-cell" role="group" data-toggle="buttons"></div>')
 		.append(
 			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
 			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')

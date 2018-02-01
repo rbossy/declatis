@@ -11,7 +11,7 @@ Help.tutorial = new Tour({
 		{
 			orphan: true,
 			backdrop: true,
-			title: 'About déclatis',
+			title: 'About Déclatis',
 			content: '<p>Déclatis is a random word generator. This is either a toy, a branding tool, or a helper for creative minds.</p>'+
 			'<p>Déclatis is developed and maintained by <a href="https://github.com/rbossy">Robert Bossy</a>. You can drop bug reports and feature requests by creating issues in the <a href="https://github.com/rbossy/declatis/">GitHub project</a>.</p>'+
 			'<p>Déclatis is distributed under the <a href="https://github.com/rbossy/declatis/blob/master/LICENSE">MIT License</a>.</p>'+
@@ -19,16 +19,49 @@ Help.tutorial = new Tour({
 			template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-header bg-info"></h3> <div class="popover-body"></div> <div class="popover-navigation"> <div class="btn-group"> <button class="btn btn-sm btn-info" data-role="next">Tutorial</button> <button class="btn btn-sm btn-secondary" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> <button class="btn btn-sm btn-info" data-role="end">Dismiss</button> </div> </div>',
 		},
 		{
-			element: '#generated-words',
+			element: '#container-generated',
 			backdrop: true,
 			title: 'Generated words',
-			content: '<p>These are the generated words. You can select the ones you like by clicking on them. The icon next to each word gives you access to parameters of the generation algorithm.</p>'
+			content: '<p>These are the generated words.</p>'+
+			'<p>Each word has this little chart indicating the score given to the generated word. The score depends on the probability of characters assembled to make the word. A click on this widget summons a detailed account of the word generation.</p>',
 		},
 		{
-			element: '#btn-export',
+			element: '#generated-sort',
 			backdrop: true,
-			title: 'Export words',
-			content: '<p>This button sends selected words to the clipboard, as if they were copied. Then you can paste them in another application.</p>'
+			title: 'Sort words',
+			content: '<p>Sort words alphabetically, by score (highest to lowest), or number of characters.</p>'
+		},
+		{
+			element: '#container-generated .dismiss-button:first',
+			backdrop: true,
+			title: 'Dismiss word',
+			content: '<p>If a word does not suit your taste or need, you can dismiss it with this button.</p>'
+		},
+		{
+			element: '#container-generated .validate-button:first',
+			backdrop: true,
+			title: 'Validate word',
+			content: '<p>You can put aside a word that you like with this other button.</p>',
+			reflex: true
+		},
+		{
+			element: '#generated-do-all',
+			backdrop: true,
+			title: 'Dismiss or validate all',
+			content: '<p>You can dismiss or validate all remaining words. These buttons empty the generated words.</p>'
+		},
+		{
+			element: '#container-validated .word-cell:first',
+			backdrop: true,
+			title: 'Validated word',
+			content: '<p>Validated words are moved on the right panel. You can still look at the details or dismiss it.</p>',
+			onShow: function(tour) { Action.validateWord($('.validate-button')[0]); }
+		},
+		{
+			element: '.icon-export',
+			backdrop: true,
+			title: 'Export validated words',
+			content: '<p>This button sends validated words into the clipboard, as if you had selected and copied them. You can then paste the words in another application.</p>'
 		},
 		{
 			element: '#btn-generate',
@@ -40,7 +73,7 @@ Help.tutorial = new Tour({
 			element: '#current-dictionary',
 			backdrop: true,
 			title: 'Training dictionary',
-			content: '<p>Déclatis generation algorithm requires a training dictionary: the words it generates will look like the words in this dctionary.</p>'+
+			content: '<p>Déclatis generation algorithm requires a training dictionary: the words it generates will look like the words in this dictionary.</p>'+
 			'<p>Here you can select the training dictionary among a set common word/name categories.</p>'+
 			'<p>Changing the dictionary regenerates another set of words.</p>'
 		},
@@ -52,10 +85,17 @@ Help.tutorial = new Tour({
 			'<p>Changing the familiarity regenerates another set of words.</p>'
 		},
 		{
+			element: '#prefix-suffix',
+			backdrop: true,
+			title: 'Prefix &amp; suffix',
+			content: '<p>If you specify a prefix or a suffix, then Déclatis will generate words that start with the prefix and end with the suffix.</p>'+
+			'<p>Changing the prefix or the suffix regenerates another set of words.</p>'
+		},
+		{
 			element: '#character-count-slider',
 			backdrop: true,
 			title: 'Word length',
-			content: '<p>This slider controls the minimum and maximum number of characters of generated words.</p>'+
+			content: '<p>This slider controls the minimum and maximum number of characters of generated words, including prefix and suffix.</p>'+
 			'<p>Changing the length regenerates another set of words.</p>'
 		},
 		{

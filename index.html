@@ -15,8 +15,8 @@
 	<script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/bootstrap-slider.min.js"></script>
 	<script src="js/bootstrap-tour.min.js"></script>
-	<script src="js/declatis/help.js"></script>
 	<script src="js/declatis/main.js"></script>
+	<script src="js/declatis/help.js"></script>
 	<script src="js/jquery.easypiechart.min.js"></script>
 </head>
 <body>
@@ -69,7 +69,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row form-row">
+				<div id="prefix-suffix" class="row form-row">
 					<div class="col-6 form-label">
 						Prefix &amp; suffix
 					</div>
@@ -106,7 +106,7 @@
 					<div class="col"> <!-- generated -->
 						<div class="row word-set">
 							<div class="col-4">
-								<div class="btn-group container-fluid" role="group" aria-label="Sort">
+								<div id="generated-sort" class="btn-group container-fluid" role="group" aria-label="Sort">
 									<button type="button" class="btn btn-secondary btn-sort btn-sm btn-tool" onclick="Action.sort(WordSet.generated, Settings.ORDER_ALPHA)" data-toggle="tooltip" data-placement="top" title="Sort alphabetically"><img height="20px" src="images/sort-by-alphabet.svg"></button>
 									<button type="button" class="btn btn-secondary btn-sort btn-tool" onclick="Action.sort(WordSet.generated, Settings.ORDER_SCORE)" data-toggle="tooltip" data-placement="top" title="Sort by score"><img height="20px" src="images/sort-by-order.svg"></button>
 									<button type="button" class="btn btn-secondary btn-sort btn-tool" onclick="Action.sort(WordSet.generated, Settings.ORDER_LENGTH)" data-toggle="tooltip" data-placement="top" title="Sort by length"><img height="20px" src="images/sort-by-attributes.svg"></button>
@@ -115,7 +115,7 @@
 							<div class="col-4">
 							</div>
 							<div class="col-4">
-								<div class="btn-group" role="group">
+								<div id="generated-do-all" class="btn-group" role="group">
 									<button type="button" class="btn btn-light btn-lg text-danger icon-block btn-tool" data-toggle="tooltip" title="Dismiss all" onclick="Action.dismissAll(WordSet.generated)"></button>
 									<button type="button" class="btn btn-light text-success icon-check btn-tool" data-toggle="tooltip" title="Validate all" onclick="Action.allWords(WordSet.generated, Action.validateWord)"></button>
 								</div>
