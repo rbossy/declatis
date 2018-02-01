@@ -185,7 +185,7 @@ class Widget {
 	}
 
 	static createDismissAlert(words, message) {
-		var undo = $('<a class="btn btn-sm btn-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
+		var undo = $('<a class="btn text-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
 		.data('words', words)
 		.click(Action.undoDismiss);
 		Widget.warning([message, undo]);
@@ -352,7 +352,6 @@ class Action {
 		Widget.displayWords(wordSet, wordSet.words.sort(order));
 	}
 }
-
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
