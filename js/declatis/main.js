@@ -111,9 +111,8 @@ class WordSet {
 		return result;
 	}
 
-	static dismissButton(w) {
-		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>')
-		.data('word', w);
+	get count() {
+		return $('#' + this.containerId + ' .dismiss-button').length;
 	}
 }
 WordSet.generated = new WordSet(
@@ -121,9 +120,8 @@ WordSet.generated = new WordSet(
 	'generated',
 	function(cell, w) {
 		cell.append(
-			WordSet.dismissButton(w),
-			$('<button class="btn btn-light btn-sm word-button icon-check text-success validate-button" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
-			.data('word', w)
+			Widget.createDismissButton(w),
+			Widget.createValidateButton(w)
 		);
 	},
 	false
@@ -133,13 +131,13 @@ WordSet.validated = new WordSet(
 	'generated',
 	function(cell, w) {
 		cell.append(
-			WordSet.dismissButton(w)
+			Widget.createDismissButton(w)
 		);
 	},
 	true
 );
 
-class Action {
+class Widget {
 	static alert(level, message) {
 		$('#alert-row').append(
 			$('<div class="alert alert-dismissible" role="alert">')
@@ -160,126 +158,44 @@ class Action {
 	}
 
 	static warning(message) {
-		Action.alert('warning', message);
+		Widget.alert('warning', message);
 	}
 
 	static clear() {
 		$('.alert').remove();
 	}
 
-	static setLengthDisplay(min, max) {
+	static updateLengthDisplay(min, max) {
 		$('#character-count-badge').text('' + min + '-' + max);
 	}
 
-	static getValidatedCount() {
-		return $('#' + WordSet.validated.containerId + ' .dismiss-button').length;
-	}
-
 	static updateValidatedCount() {
-		var count = Action.getValidatedCount();
-		$('#validated-count').text(count);
+		$('#validated-count').text(WordSet.validated.count);
 	}
 
 	static updateToolButtons(wordSet) {
-		var count = $('#' + wordSet.containerId + ' .dismiss-button').length;
-		var disabled = (count === 0);
+		var disabled = (wordSet.count === 0);
 		$('#' + wordSet.containerId).parent().parent().find(' .btn-tool').prop('disabled', disabled);
 	}
 
-	static validateWord(button) {
-		var w = $(button).data('word');
-		var cell = Action.createWordCell(WordSet.validated, w);
-		WordSet.validated.containerElement.prepend(cell);
-		$(button).parent().remove();
-		Action.updateValidatedCount();
-		Action.updateToolButtons(WordSet.generated);
-		Action.updateToolButtons(WordSet.validated);
-	}
-
-	static validateAll() {
-		var words = WordSet.generated.words;
-		for (var w of words) {
-			var cell = Action.createWordCell(WordSet.validated, w);
-			WordSet.validated.containerElement.prepend(cell);
-		}
-		$('#' + WordSet.generated.containerId + ' .dismiss-button').parent().remove();
-		Action.updateValidatedCount();
-		Action.updateToolButtons(WordSet.generated);
-		Action.updateToolButtons(WordSet.validated);
-	}
-
-	static dismissWord(button) {
-		var w = $(button).data('word');
-		$(button).parent().remove();
-		Action.updateValidatedCount();
-		Action.updateToolButtons(WordSet.generated);
-		Action.updateToolButtons(WordSet.validated);
-		Action.createDismissAlert([w], 'Dismissed: ' + w.cleanString);
-	}
-
-	static dismissAll(wordSet, message) {
-		var words = wordSet.words;
-		$('#' + wordSet.containerId + ' .dismiss-button').parent().remove();
-		Action.updateValidatedCount();
-		Action.updateToolButtons(WordSet.generated);
-		Action.updateToolButtons(WordSet.validated);
-		Action.createDismissAlert(words, 'Dismissed all ' + wordSet.adjective + ' words');
+	static updateWordSetToolbars() {
+		Widget.updateValidatedCount();
+		Widget.updateToolButtons(WordSet.generated);
+		Widget.updateToolButtons(WordSet.validated);		
 	}
 
 	static createDismissAlert(words, message) {
 		var undo = $('<a class="btn btn-sm btn-warning icon-reply" data-toggle="tooltip" title="Undo"></a>')
 		.data('words', words)
 		.click(Action.undoDismiss);
-		Action.warning([message, undo]);
-	}
-
-	static undoDismiss() {
-		var words = $(this).data('words');
-		for (var w of words) {
-			var cell = Action.createWordCell(w.wordSet, w);
-			w.wordSet.containerElement.prepend(cell);
-		}
-		$(this).parent().alert('close');
-		Action.updateValidatedCount();
-		Action.updateToolButtons(WordSet.generated);
-		Action.updateToolButtons(WordSet.validated);
-	}
-
-	static export() {
-		var $temp = $("<textarea></textarea>");
-		$("body").append($temp);
-		var words = WordSet.validated.words;
-		var wordStrings = words.map(function(w) { return w.cleanString; });
-		$temp.val(wordStrings.join('\n')+'\n').select();
-		document.execCommand("copy");
-		$temp.remove();
-		Action.alert('success', 'Sent '+Action.getValidatedCount()+' words to clipboard');
-	}
-
-	static _len(s) {
-		if (s === undefined) {
-			return 0;
-		}
-		return s.length;
-	}
-
-	static generate() {
-		var nFixed = Action._len(Settings.prefix) + Action._len(Settings.suffix);
-		app.addDefaultPattern(Settings.dictionary, Settings.k, Settings.min - nFixed, Settings.max - nFixed, Settings.prefix, Settings.suffix);
-		app.excludeTrainingWords.push(Dictionary.get(Settings.dictionary).matrix);
-		app.generate();
-		Action.updateToolButtons(WordSet.generated);
-	}
-
-	static sort(wordSet, order) {
-		Action.displayWords(wordSet, wordSet.words.sort(order));
+		Widget.warning([message, undo]);
 	}
 
 	static displayWords(wordSet, words) {
 		var container = wordSet.containerElement;
 		container.empty();
 		for (var w of words) {
-			var cell = Action.createWordCell(wordSet, w);
+			var cell = Widget.createWordCell(wordSet, w);
 			container.append(cell);
 		}
 	}
@@ -289,7 +205,7 @@ class Action {
 		.append(
 			$('<label class="btn btn-light btn-lg container-fluid word-string"></label>').text(w.cleanString),
 			$('<button type="button" class="btn btn-light btn-sm word-status text-secondary"></button>')
-			.popover(Action.createWordPopover(wordSet, w))
+			.popover(Widget.createWordPopover(wordSet, w))
 			.on('hidden.bs.popover', function() { $('.word-status').removeClass('active'); })
 			.append(
 				$('<div class="chart" data-percent="'+w.score*150+'"></div>')
@@ -302,8 +218,42 @@ class Action {
 		return result;
 	}
 
-	static popoverRow(th, td) {
-		return '<tr><th class="word-score">'+th+'</th><td>'+td+'</td></tr>';
+	static createWordPopover(wordSet, w) {
+		return {
+			title: '<h4>' + w.cleanString + '</h4>',
+			html: true,
+			content: Widget.createWordPopoverContent(wordSet, w),
+			trigger: 'focus',
+			placement: 'top',
+		}
+	}
+
+	static createWordPopoverContent(wordSet, w) {
+		var result = '<table><tbody>';
+		if (wordSet.extendedPopover) {
+			var mark = Widget.getWordPatternMarkovian(w);
+			result += Widget.popoverRow('Dictionary', mark.matrix.name);
+			result += Widget.popoverRow('Familiarity', Settings.familiarities[mark.k]);
+			var fixed = 0;
+			var prefix = w.pattern.generators[0].value;
+			if (prefix) {
+				result += Widget.popoverRow('Prefix', prefix);
+				fixed += prefix.length;
+			}
+			var suffix = w.pattern.generators[w.pattern.generators.length-1].value;
+			if (prefix) {
+				result += Widget.popoverRow('Suffix', suffix);
+				fixed += suffix.len;
+			}
+			result += Widget.popoverRow('Length', '' + (mark.min+fixed) + '-' + (mark.max+fixed));
+		}
+		result +=
+			Widget.popoverRow('Score', w.score.toFixed(4)) +
+			Widget.popoverRow('Mean probability', w.meanProbability.toFixed(2)) +
+			(w.kDegradationMean > 0 ? Widget.popoverRow('Degradation', w.kDegradationMean.toFixed(2)) : '') +
+			(w.backtrackCount > 0 ? Widget.popoverRow('Backtracks', w.backtrackCount) : '') +
+			'</tbody></table>';
+		return result;
 	}
 
 	static getWordPatternMarkovian(w) {
@@ -314,56 +264,106 @@ class Action {
 		}
 	}
 
-	static createWordPopoverContent(wordSet, w) {
-		var result = '<table><tbody>';
-		if (wordSet.extendedPopover) {
-			var mark = Action.getWordPatternMarkovian(w);
-			result += Action.popoverRow('Dictionary', mark.matrix.name);
-			result += Action.popoverRow('Familiarity', Settings.familiarities[mark.k]);
-			var fixed = 0;
-			var prefix = w.pattern.generators[0].value;
-			if (prefix) {
-				result += Action.popoverRow('Prefix', prefix);
-				fixed += prefix.length;
-			}
-			var suffix = w.pattern.generators[w.pattern.generators.length-1].value;
-			if (prefix) {
-				result += Action.popoverRow('Suffix', suffix);
-				fixed += suffix.len;
-			}
-			result += Action.popoverRow('Length', '' + (mark.min+fixed) + '-' + (mark.max+fixed));
-		}
-		result +=
-			Action.popoverRow('Score', w.score.toFixed(4)) +
-			Action.popoverRow('Mean probability', w.meanProbability.toFixed(2)) +
-			(w.kDegradationMean > 0 ? Action.popoverRow('Degradation', w.kDegradationMean.toFixed(2)) : '') +
-			(w.backtrackCount > 0 ? Action.popoverRow('Backtracks', w.backtrackCount) : '') +
-			'</tbody></table>';
-		return result;
+	static popoverRow(th, td) {
+		return '<tr><th class="word-score">'+th+'</th><td>'+td+'</td></tr>';
 	}
 
-	static createWordPopover(wordSet, w) {
-		return {
-			title: '<h4>' + w.cleanString + '</h4>',
-			html: true,
-			content: Action.createWordPopoverContent(wordSet, w),
-			trigger: 'focus',
-			placement: 'top',
+	static createDismissButton(w) {
+		return $('<button class="btn btn-light btn-sm word-button dismiss-button icon-block text-danger" onclick="Action.dismissWord(this)" data-toggle="tooltip" title="Dismiss word"></button>')
+		.data('word', w);
+	}
+
+	static createValidateButton(w) {
+		return $('<button class="btn btn-light btn-sm word-button icon-check text-success validate-button" onclick="Action.validateWord(this)" data-toggle="tooltip" title="Validate word"></button>')
+		.data('word', w)
+	}
+}
+
+function strlen(s) {
+	if (s === undefined) {
+		return 0;
+	}
+	return s.length;
+}
+
+class Action {
+	static validateWord(button) {
+		var w = $(button).data('word');
+		var cell = Widget.createWordCell(WordSet.validated, w);
+		WordSet.validated.containerElement.prepend(cell);
+		$(button).parent().remove();
+		Widget.updateWordSetToolbars();
+	}
+
+	static validateAll() {
+		var words = WordSet.generated.words;
+		for (var w of words) {
+			var cell = Widget.createWordCell(WordSet.validated, w);
+			WordSet.validated.containerElement.prepend(cell);
 		}
+		$('#' + WordSet.generated.containerId + ' .dismiss-button').parent().remove();
+		Widget.updateWordSetToolbars();
+	}
+
+	static dismissWord(button) {
+		var w = $(button).data('word');
+		$(button).parent().remove();
+		Widget.updateWordSetToolbars();
+		Widget.createDismissAlert([w], 'Dismissed: ' + w.cleanString);
+	}
+
+	static dismissAll(wordSet, message) {
+		var words = wordSet.words;
+		$('#' + wordSet.containerId + ' .dismiss-button').parent().remove();
+		Widget.updateWordSetToolbars();
+		Widget.createDismissAlert(words, 'Dismissed all ' + wordSet.adjective + ' words');
+	}
+
+	static undoDismiss() {
+		var words = $(this).data('words');
+		for (var w of words) {
+			var cell = Widget.createWordCell(w.wordSet, w);
+			w.wordSet.containerElement.prepend(cell);
+		}
+		$(this).parent().alert('close');
+		Widget.updateWordSetToolbars();
+	}
+
+	static export() {
+		var $temp = $("<textarea></textarea>");
+		$("body").append($temp);
+		var words = WordSet.validated.words;
+		var wordStrings = words.map(function(w) { return w.cleanString; });
+		$temp.val(wordStrings.join('\n')+'\n').select();
+		document.execCommand("copy");
+		$temp.remove();
+		Widget.alert('success', 'Sent '+WordSet.validated.count+' words to clipboard');
+	}
+
+	static generate() {
+		var nFixed = strlen(Settings.prefix) + strlen(Settings.suffix);
+		app.addDefaultPattern(Settings.dictionary, Settings.k, Settings.min - nFixed, Settings.max - nFixed, Settings.prefix, Settings.suffix);
+		app.excludeTrainingWords.push(Dictionary.get(Settings.dictionary).matrix);
+		app.generate();
+		Widget.updateToolButtons(WordSet.generated);
+	}
+
+	static sort(wordSet, order) {
+		Widget.displayWords(wordSet, wordSet.words.sort(order));
 	}
 }
 
 
 var app = new App({
 	WordRejected: function(word, reason) { console.warn('Rejected because ' + reason + ': ' + word.cleanString); },
-	GenerationFinished: function(words) { Action.displayWords(WordSet.generated, words); }
+	GenerationFinished: function(words) { Widget.displayWords(WordSet.generated, words); }
 });
 app.wordCount = 40;
 
 $(document).ready(function() {
 	var slider = $("#character-count").slider();
 	slider.on('slideStop', function() { var v = slider.data('slider').getValue(); Settings.setLength(v[0], v[1]); });
-	slider.on('change', function() { var v = slider.data('slider').getValue(); Action.setLengthDisplay(v[0], v[1]); });
+	slider.on('change', function() { var v = slider.data('slider').getValue(); Widget.updateLengthDisplay(v[0], v[1]); });
 
 	$('#prefix').val(''); // fix firefox bug
 
