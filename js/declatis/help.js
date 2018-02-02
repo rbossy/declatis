@@ -15,8 +15,20 @@ Help.tutorial = new Tour({
 			content: '<p>Déclatis is a random word generator. This is either a toy, a branding tool, or a helper for creative minds.</p>'+
 			'<p>Déclatis is developed and maintained by <a href="https://github.com/rbossy">Robert Bossy</a>. You can drop bug reports and feature requests by creating issues in the <a href="https://github.com/rbossy/declatis/">GitHub project</a>.</p>'+
 			'<p>Déclatis is distributed under the <a href="https://github.com/rbossy/declatis/blob/master/LICENSE">MIT License</a>.</p>'+
-			'<p>This user interface uses icons from the <a href="http://www.entypo.com/">Entypo+</a> collection by Daniel Bruce distributed under the CC BY-SA license.</p>',
-			template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-header bg-info"></h3> <div class="popover-body"></div> <div class="popover-navigation"> <div class="btn-group"> <button class="btn btn-sm btn-info" data-role="next">Tutorial</button> <button class="btn btn-sm btn-secondary" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> <button class="btn btn-sm btn-info" data-role="end">Dismiss</button> </div> </div>',
+			'<h4 class="popover-header">Software libraries</h4>'+
+			'<p>This user interface is built upon several libraries:</p>'+
+			'<ul>'+
+			'<li>Base metabolism: <a href="https://jquery.com/">jQuery</a> by the <a href="https://jquery.org/team/">jQuery Foundation</a> [<a href="https://jquery.org/license/">MIT license</a>].</li>'+
+			'<li>Layout: <a target="_new" href="http://getbootstrap.com/">Bootstrap</a> by the <a href="https://github.com/orgs/twbs/people">Bootstrap core team</a> [<a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT license</a>].</li>'+
+			'<li>Length slider: <a href="XXX">bootstrap-slider</a> by XXX [<a href="XXX">XXX</a>].</li>'+
+			'<li>About and tutorial: <a href="http://bootstraptour.com/">Bootstrap Tour</a> by <a href="https://github.com/sorich87">Ulrich Sossou</a> [<a href="https://github.com/sorich87/bootstrap-tour/blob/master/LICENSE">MIT license</a>].</li>'+
+			'</ul>'+
+			'<h4 class="popover-header">Icons</h4>'+
+			'<ul>'+
+			'<li><span class="icon-block"></span><span class="icon-check"></span><span class="icon-cycle"></span><span class="icon-export"></span><span class="icon-help"></span><span class="icon-reply"></span>: <a href="http://www.entypo.com/">Entypo+</a> collection by <a href="XXX">Daniel Bruce</a> [<a href="XXX">CC BY-SA license</a>].</li>'+
+			'<li><img height="16px" src="images/sort-by-alphabet.svg"><img height="16px" src="images/sort-by-order.svg"><img height="16px" src="images/sort-by-attributes.svg">: <a href="">XXX</a> collection by <a href="XXX">XXX</a> [<a href="XXX">XXX license</a>].</li>'+
+			'</ul>',
+			template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-header bg-info"></h3> <div class="popover-body"></div> <div class="popover-navigation"> <div class="btn-group"><button class="btn btn-sm btn-info" data-role="next">Tutorial</button></div> <button class="btn btn-sm btn-info" data-role="end">Dismiss</button> </div> </div>',
 		},
 		{
 			element: '#container-generated',
