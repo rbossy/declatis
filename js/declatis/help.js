@@ -20,13 +20,13 @@ Help.tutorial = new Tour({
 			'<ul>'+
 			'<li>Base metabolism: <a href="https://jquery.com/">jQuery</a> by the <a href="https://jquery.org/team/">jQuery Foundation</a> [<a href="https://jquery.org/license/">MIT license</a>].</li>'+
 			'<li>Layout: <a target="_new" href="http://getbootstrap.com/">Bootstrap</a> by the <a href="https://github.com/orgs/twbs/people">Bootstrap core team</a> [<a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT license</a>].</li>'+
-			'<li>Length slider: <a href="XXX">bootstrap-slider</a> by XXX [<a href="XXX">XXX</a>].</li>'+
+			'<li>Length slider: <a href="https://github.com/seiyria/bootstrap-slider">bootstrap-slider</a> by <a href="https://github.com/seiyria">Kyle J. Kemp</a> [<a href="https://github.com/seiyria/bootstrap-slider/blob/master/LICENSE.md">MIT license</a>].</li>'+
 			'<li>About and tutorial: <a href="http://bootstraptour.com/">Bootstrap Tour</a> by <a href="https://github.com/sorich87">Ulrich Sossou</a> [<a href="https://github.com/sorich87/bootstrap-tour/blob/master/LICENSE">MIT license</a>].</li>'+
 			'</ul>'+
 			'<h4 class="popover-header">Icons</h4>'+
 			'<ul>'+
-			'<li><span class="icon-block"></span><span class="icon-check"></span><span class="icon-cycle"></span><span class="icon-export"></span><span class="icon-help"></span><span class="icon-reply"></span>: <a href="http://www.entypo.com/">Entypo+</a> collection by <a href="XXX">Daniel Bruce</a> [<a href="XXX">CC BY-SA license</a>].</li>'+
-			'<li><img height="16px" src="images/sort-by-alphabet.svg"><img height="16px" src="images/sort-by-order.svg"><img height="16px" src="images/sort-by-attributes.svg">: <a href="">XXX</a> collection by <a href="XXX">XXX</a> [<a href="XXX">XXX license</a>].</li>'+
+			'<li><span class="icon-block"></span><span class="icon-check"></span><span class="icon-cycle"></span><span class="icon-export"></span><span class="icon-help"></span><span class="icon-reply"></span>: <a href="http://www.entypo.com/">Entypo+</a> collection by <a href="http://www.danielbruce.se/">Daniel Bruce</a> [<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA license</a>].</li>'+
+			'<li><img height="16px" src="images/sort-by-alphabet.svg"><img height="16px" src="images/sort-by-order.svg"><img height="16px" src="images/sort-by-attributes.svg">: <a href="https://fontawesome.com/">Font Awesome</a> collection by Fonticons [<a href="https://creativecommons.org/licenses/by/4.0/">CC BY license</a>].</li>'+
 			'</ul>',
 			template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-header bg-info"></h3> <div class="popover-body"></div> <div class="popover-navigation"> <div class="btn-group"><button class="btn btn-sm btn-info" data-role="next">Tutorial</button></div> <button class="btn btn-sm btn-info" data-role="end">Dismiss</button> </div> </div>',
 		},
