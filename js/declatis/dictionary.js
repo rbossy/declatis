@@ -36,6 +36,7 @@ Dictionary.PRESETS = [
 	new Dictionary('English words', 'dict/english-words.utf8'),
 	new Dictionary('French proper names', 'dict/french-proper-names.utf8'),
 	new Dictionary('French words', 'dict/french-words.utf8'),
+	new Dictionary('French verbs', 'dict/french-verbs.utf8'),
 	new Dictionary('Gothic words', 'dict/gothic-words.utf8'),
 	new Dictionary('Greek female names', 'dict/greek-female-names.utf8'),
 	new Dictionary('Greek male names', 'dict/greek-male-names.utf8'),
